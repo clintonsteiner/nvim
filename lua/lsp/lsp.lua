@@ -79,7 +79,7 @@ vim.lsp.config["ruff"] = {
             },
         },
     },
-    on_attach = function(client, bufnr)
+    on_attach = function(client, _bufnr)  -- luacheck: ignore 213
         client.server_capabilities.hoverProvider = false
     end,
 }

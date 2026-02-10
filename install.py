@@ -100,10 +100,62 @@ class NvimSetup:
         return True
 
     def download_neovim(self) -> bool:
-        """Download Neovim appimage."""
-        if not self.confirm(f"Download Neovim v{self.neovim_version}?"):
+        """Download or install Neovim."""
+        if not self.confirm(f"Install Neovim v{self.neovim_version}?"):
             return False
 
+        system = platform.system()
+
+        if system == "Darwin":  # macOS
+            return self._install_neovim_macos()
+        elif system == "Linux":
+            return self._install_neovim_linux()
+        else:
+            print(f"✗ Unsupported system: {system}")
+            return False
+
+    def _install_neovim_macos(self) -> bool:
+        """Install Neovim on macOS using Homebrew."""
+        # Check if Homebrew is installed
+        result = subprocess.run(["which", "brew"], capture_output=True)
+        if result.returncode == 0:
+            print("Using Homebrew to install Neovim...")
+            return self.run_command(["brew", "install", "neovim"], "install Neovim with Homebrew")
+        else:
+            print("⚠ Homebrew not found. Installing Neovim binary instead...")
+            return self._download_neovim_macos_binary()
+
+    def _download_neovim_macos_binary(self) -> bool:
+        """Download Neovim macOS binary."""
+        self.neovim_dir.mkdir(parents=True, exist_ok=True)
+
+        nvim_dir = self.neovim_dir / "nvim.app"
+        if nvim_dir.exists():
+            if not self.confirm("Neovim.app already exists. Overwrite?"):
+                return True
+            shutil.rmtree(nvim_dir)
+
+        # Determine architecture
+        arch = "arm64" if platform.machine() == "arm64" else "x86_64"
+        url = f"https://github.com/neovim/neovim/releases/download/v{self.neovim_version}/nvim-macos-{arch}.tar.gz"
+
+        tar_path = self.neovim_dir / "nvim.tar.gz"
+        cmd = ["curl", "-L", "-o", str(tar_path), url]
+
+        if not self.run_command(cmd, "download Neovim macOS binary"):
+            return False
+
+        # Extract
+        cmd = ["tar", "-xzf", str(tar_path), "-C", str(self.neovim_dir)]
+        if not self.run_command(cmd, "extract Neovim"):
+            return False
+
+        tar_path.unlink()
+        print(f"✓ Downloaded and extracted Neovim")
+        return True
+
+    def _install_neovim_linux(self) -> bool:
+        """Download Neovim AppImage for Linux."""
         nvim_path = self.neovim_dir / "nvim.appimage"
 
         if nvim_path.exists():
@@ -114,7 +166,7 @@ class NvimSetup:
         url = f"https://github.com/neovim/neovim/releases/download/v{self.neovim_version}/nvim-linux-x86_64.appimage"
         cmd = ["curl", "-L", "-o", str(nvim_path), url]
 
-        if not self.run_command(cmd, f"download Neovim"):
+        if not self.run_command(cmd, "download Neovim"):
             return False
 
         try:
@@ -228,13 +280,30 @@ class NvimSetup:
         return True
 
     def create_launch_script(self) -> bool:
-        """Create the Neovim launch script."""
+        """Create the Neovim launch script (if needed)."""
+        system = platform.system()
+
+        # On macOS with Homebrew, no launch script needed
+        if system == "Darwin":
+            result = subprocess.run(["which", "nvim"], capture_output=True)
+            if result.returncode == 0:
+                print("✓ Neovim installed via Homebrew, no launch script needed")
+                return True
+
         if not self.confirm("Create Neovim launch script?"):
             return False
 
         script_path = self.local_bin_dir / "nvim"
 
-        script_content = f"""#!/usr/bin/env bash
+        if system == "Darwin":
+            # macOS binary installation
+            nvim_bin = self.neovim_dir / "nvim.app" / "bin" / "nvim"
+            script_content = f"""#!/usr/bin/env bash
+{nvim_bin} "$@"
+"""
+        else:
+            # Linux AppImage
+            script_content = f"""#!/usr/bin/env bash
 {self.neovim_dir}/nvim.appimage "$@"
 """
 
@@ -256,14 +325,35 @@ class NvimSetup:
             print(f"Add this line to your ~/.bashrc or ~/.zshrc:")
             print(f"  export PATH=$HOME/.local/bin:$PATH")
 
+    def _get_nvim_executable(self) -> Optional[str]:
+        """Get path to Neovim executable based on system and installation method."""
+        system = platform.system()
+
+        if system == "Darwin":
+            # Try Homebrew first
+            result = subprocess.run(["which", "nvim"], capture_output=True, text=True)
+            if result.returncode == 0:
+                return result.stdout.strip()
+
+            # Try binary installation
+            nvim_bin = self.neovim_dir / "nvim.app" / "bin" / "nvim"
+            if nvim_bin.exists():
+                return str(nvim_bin)
+        elif system == "Linux":
+            nvim_path = self.neovim_dir / "nvim.appimage"
+            if nvim_path.exists():
+                return str(nvim_path)
+
+        return None
+
     def install_treesitter(self) -> bool:
         """Optionally install Treesitter support."""
         if not self.confirm("Install Treesitter language support?"):
             return False
 
-        nvim_path = self.neovim_dir / "nvim.appimage"
+        nvim_path = self._get_nvim_executable()
 
-        if not nvim_path.exists():
+        if not nvim_path:
             print("✗ Neovim not found. Cannot install Treesitter.")
             return False
 
@@ -340,11 +430,13 @@ class NvimSetup:
         self.check_path_setup()
 
         if self.confirm("\nLaunch Neovim now to install plugins?"):
-            nvim_path = self.neovim_dir / "nvim.appimage"
-            if nvim_path.exists():
+            nvim_path = self._get_nvim_executable()
+            if nvim_path:
                 # Run nvim with :PlugInstall
                 cmd = [str(nvim_path), "-c", "PlugInstall", "-c", "quit"]
                 self.run_command(cmd, "install plugins")
+            else:
+                print("⚠ Could not find Neovim executable")
 
 
 if __name__ == "__main__":

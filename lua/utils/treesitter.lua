@@ -1,5 +1,10 @@
+---@class TreesitterUtils
+---Tree-Sitter based utility functions for code analysis
 local M = {}
 
+---Get the name of the current function being edited
+---Uses Tree-Sitter to parse and navigate the AST to find the enclosing function
+---@return string The function name, or empty string if not in a function or not Python
 function M.get_current_function_name()
     if vim.bo.filetype ~= "python" then return "" end
     local current_node = vim.treesitter.get_node()
@@ -18,6 +23,9 @@ function M.get_current_function_name()
     return success and result or ""
 end
 
+---Get the name of the current class being edited
+---Uses Tree-Sitter to parse and navigate the AST to find the enclosing class
+---@return string The class name, or empty string if not in a class or not Python
 function M.get_current_class_name()
     if vim.bo.filetype ~= "python" then return "" end
     local current_node = vim.treesitter.get_node()

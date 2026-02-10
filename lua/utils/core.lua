@@ -1,4 +1,10 @@
-function save_session()
+---@class CoreUtils
+---Core utility functions for general Neovim operations
+local M = {}
+
+---Save current Neovim session to file
+---@return nil
+function M.save_session()
     vim.ui.input({
         prompt = "Session name: ",
         default = '~/.local/share/nvim/sessions/',
@@ -12,7 +18,10 @@ function save_session()
     )
 end
 
-function toggle_text_wrap()
+---Toggle text wrapping on/off
+---Toggles between 100 character width and no wrapping
+---@return nil
+function M.toggle_text_wrap()
     local current_setting = vim.o.textwidth
     if current_setting == 0 then
         current_setting = 100
@@ -24,7 +33,12 @@ function toggle_text_wrap()
     vim.o.textwidth = current_setting
 end
 
-function toggle_diagnostics()
+---Toggle diagnostic display
+---Toggles virtual text, signs, and underline for diagnostics
+---@return nil
+function M.toggle_diagnostics()
     local current_setting = vim.diagnostic.config().virtual_text
     vim.diagnostic.config({virtual_text = not current_setting, signs = not current_setting, underline = not current_setting})
 end
+
+return M

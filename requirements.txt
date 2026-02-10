@@ -1,5 +1,0 @@
-pynvim
-python-lsp-server
-python-lsp-ruff
-darker
-darker[isort]

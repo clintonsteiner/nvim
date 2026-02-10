@@ -78,7 +78,7 @@ end
 
 function status_line()
     local status = ''
-    status = status .. get_mode_color(vim.fn.mode()) .. [[ %-"]]
+    status = status .. get_mode_color(vim.fn.mode()) .. [[ %-"]]  -- luacheck: ignore 143  -- luacheck: ignore 143
     status = status .. [[%#GitSignsAdd#%-{luaeval("gitsigns_status('head')")}]]
     status = status .. [[%#GitSignsAdd#%-{luaeval("gitsigns_status('added')")}]]
     status = status .. [[%#GitSignsChange#%-{luaeval("gitsigns_status('changed')")}]]
@@ -102,7 +102,7 @@ function win_bar()
     file_path = file_path:gsub('^%/', '')
 
     if not (file_name == nil or file_name == '' or string.sub(file_path, 1, 5) == 'term:') then
-        file_icon = ' '
+        local file_icon = ' '
         file_icon = '%#WinBarIcon#' .. file_icon .. '%*'
         local file_modified = ''
         if vim.bo.modified then
