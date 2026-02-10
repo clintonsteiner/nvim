@@ -217,7 +217,7 @@ class NvimSetup:
 
         cmd = [
             "git", "clone",
-            "https://github.com/benewberg/nvim_config.git",
+            "https://github.com/clintonsteiner/nvim.git",
             str(nvim_config_path)
         ]
 
