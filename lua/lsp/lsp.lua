@@ -34,8 +34,7 @@ vim.opt.pumheight = 20
 -- zuban lsp server
 vim.lsp.config["zuban"] = {
     cmd = { vim.env.HOME .. '/.virtualenvs/nvim/bin/zuban', 'server' },
-    -- root_dir = vim.lsp.util.root_pattern('.git', vim.fn.getcwd()),  -- start LSP server at project root or cwd
-    root_markers = { ".git" },
+    root_dir = vim.lsp.util.root_pattern('.git', 'pyproject.toml', 'setup.py'),
     filetypes = { "python" },
     settings = {},
     on_attach = function(client, bufnr)  -- luacheck: ignore 213
@@ -68,6 +67,7 @@ vim.lsp.enable("zuban")
 -- ruff lsp server
 vim.lsp.config["ruff"] = {
     cmd = { vim.env.HOME .. '/.virtualenvs/nvim/bin/ruff', 'server' },
+    root_dir = vim.lsp.util.root_pattern('.git', 'pyproject.toml', 'setup.py'),
     filetypes = { "python" },
     init_options = {
         settings = {
