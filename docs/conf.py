@@ -3,7 +3,7 @@ import os
 import sys
 
 # Add the parent directory to the path so we can import the modules
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../'))
 
 # Project information
 project = 'Neovim Configuration'
@@ -32,9 +32,7 @@ source_suffix = {
 
 # HTML output options
 html_theme = 'furo'
-html_static_path = ['_static']
 html_theme_options = {
-    "sidebar_hide_on": "lg",
     "light_css_variables": {
         "color-brand-primary": "#0066cc",
         "color-brand-content": "#0066cc",

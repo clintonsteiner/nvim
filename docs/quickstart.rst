@@ -123,7 +123,7 @@ After your initial setup, consider:
 1. **Customize keybindings** - Edit ``lua/plugin/which-key.lua``
 2. **Add language servers** - Edit ``lua/lsp/lsp.lua`` for other languages
 3. **Configure plugins** - Modify files in ``lua/plugin/``
-4. **Read the full documentation** - See :doc:`configuration` for detailed options
+4. **Read the full documentation** - See :doc:`customization` for detailed options
 
 Need Help?
 ==========
