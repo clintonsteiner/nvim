@@ -30,19 +30,19 @@ jobs:
 
       - name: Build HTML
         run: make
-        working-directory: ./doc
+        working-directory: ./docs
 
       - name: Upload artifacts
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: html-docs
-          path: ./doc/html/
+          path: ./docs/html/
 
       - name: Deploy Master Docs to GitHub Pages
         if: ${{ github.ref == 'refs/heads/master' }}
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./doc/html
+          publish_dir: ./docs/html
           publish_branch: gh-pages
           keep_files: false
