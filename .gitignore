@@ -64,4 +64,4 @@ template.md
 # Python cache
 .pytest_cache/
 __pycache__/
-
+*.egg-info/
