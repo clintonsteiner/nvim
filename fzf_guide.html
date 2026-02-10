@@ -1,0 +1,726 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Configuration Structure" href="structure.html"><link rel="prev" title="LSP Features" href="lsp_features.html">
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
+        <title>FZF Guide - Neovim Configuration 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #0066cc;
+  --color-brand-content: #0066cc;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Neovim Configuration 0.1.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">Neovim Configuration 0.1.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_workflow.html">Python Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp_features.html">LSP Features</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">FZF Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Configuration Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp_configuration.html">LSP Configuration</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_philosophy.html">Project Philosophy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install_script.html">Install Script</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_dependencies.html">Python Dependencies</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/fzf_guide.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="fzf-guide">
+<h1>FZF Guide<a class="headerlink" href="#fzf-guide" title="Link to this heading">¶</a></h1>
+<p>FZF (Fuzzy Finder) is deeply integrated for fast searching. This guide covers all FZF features.</p>
+<section id="what-is-fzf">
+<h2>What is FZF?<a class="headerlink" href="#what-is-fzf" title="Link to this heading">¶</a></h2>
+<p>FZF is a command-line fuzzy finder that:</p>
+<ul class="simple">
+<li><p><strong>Searches fast</strong> - Can find files in huge projects instantly</p></li>
+<li><p><strong>Filters dynamically</strong> - Results update as you type</p></li>
+<li><p><strong>Is flexible</strong> - Works for files, buffers, git files, and more</p></li>
+<li><p><strong>Previews results</strong> - Shows a preview of selected files</p></li>
+</ul>
+</section>
+<section id="why-fzf">
+<h2>Why FZF?<a class="headerlink" href="#why-fzf" title="Link to this heading">¶</a></h2>
+<p>Instead of manually navigating directories, FZF lets you:</p>
+<ul class="simple">
+<li><p>Type part of a filename to find it</p></li>
+<li><p>Search file contents</p></li>
+<li><p>Switch between buffers</p></li>
+<li><p>Search git history</p></li>
+</ul>
+<p>Much faster than traditional file browsers.</p>
+</section>
+<section id="finding-files">
+<h2>Finding Files<a class="headerlink" href="#finding-files" title="Link to this heading">¶</a></h2>
+<p>Find any file by name:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">f</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Type part of the filename to filter. Use arrow keys to navigate. Press Enter to open.</p>
+<p><strong>Examples</strong>:</p>
+<ul class="simple">
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">main.py</span></code> - finds <code class="docutils literal notranslate"><span class="pre">main.py</span></code></p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">main</span></code> - finds all files with “main” in the name</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">test</span></code> - finds test files</p></li>
+</ul>
+</section>
+<section id="switching-buffers">
+<h2>Switching Buffers<a class="headerlink" href="#switching-buffers" title="Link to this heading">¶</a></h2>
+<p>Switch between open files:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">b</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Lists all open buffers. Type to filter by filename. Press Enter to switch.</p>
+<p><strong>Use case</strong>: Quickly flip between <code class="docutils literal notranslate"><span class="pre">utils.py</span></code> and <code class="docutils literal notranslate"><span class="pre">test_utils.py</span></code>.</p>
+</section>
+<section id="searching-git-files">
+<h2>Searching Git Files<a class="headerlink" href="#searching-git-files" title="Link to this heading">¶</a></h2>
+<p>Search in git-tracked files only:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">g</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Ignores untracked files and directories in <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>. Useful for large projects with many ignored files.</p>
+<p><strong>Example</strong>: In a project with <code class="docutils literal notranslate"><span class="pre">node_modules/</span></code>, <code class="docutils literal notranslate"><span class="pre">.git/</span></code>, etc., <code class="docutils literal notranslate"><span class="pre">&lt;C-g&gt;</span></code> searches only tracked code files.</p>
+</section>
+<section id="searching-file-contents">
+<h2>Searching File Contents<a class="headerlink" href="#searching-file-contents" title="Link to this heading">¶</a></h2>
+<p>Search for text across the project:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>leader<span class="p">&gt;</span><span class="k">r</span>
+</pre></div>
+</div>
+<p>Type text to search. Results show:</p>
+<ul class="simple">
+<li><p>Filename</p></li>
+<li><p>Line number</p></li>
+<li><p>Line content</p></li>
+</ul>
+<p>Navigate results and press Enter to jump to that location.</p>
+<p><strong>Example</strong>: Search for <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">my_function</span></code> to find where a function is defined.</p>
+</section>
+<section id="searching-in-selection">
+<h2>Searching in Selection<a class="headerlink" href="#searching-in-selection" title="Link to this heading">¶</a></h2>
+<p>Search within the selected text:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>leader<span class="p">&gt;</span>s
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Visually select text</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;s</span></code></p></li>
+<li><p>FZF searches only within that text</p></li>
+</ol>
+</section>
+<section id="using-fzf-preview">
+<h2>Using FZF Preview<a class="headerlink" href="#using-fzf-preview" title="Link to this heading">¶</a></h2>
+<p>FZF shows a preview of selected files on the right side:</p>
+<ul class="simple">
+<li><p>Scrollable with arrow keys</p></li>
+<li><p>Shows syntax highlighting</p></li>
+<li><p>Updates as you navigate</p></li>
+</ul>
+<p><strong>Toggle preview</strong>:</p>
+<p>Press <code class="docutils literal notranslate"><span class="pre">?</span></code> in FZF to toggle the preview panel.</p>
+</section>
+<section id="fzf-keybindings">
+<h2>FZF Keybindings<a class="headerlink" href="#fzf-keybindings" title="Link to this heading">¶</a></h2>
+<p>While in FZF search:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Arrow keys</p></td>
+<td><p>Navigate results</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-j&gt;/&lt;C-k&gt;</span></code></p></td>
+<td><p>Move down/up (alternative)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Enter</span></code></p></td>
+<td><p>Select highlighted item</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-c&gt;</span></code></p></td>
+<td><p>Cancel search</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;</span></code></p></td>
+<td><p>Open in horizontal split</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code></p></td>
+<td><p>Open in vertical split</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-t&gt;</span></code></p></td>
+<td><p>Open in new tab</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">?</span></code></p></td>
+<td><p>Toggle preview</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-l&gt;</span></code></p></td>
+<td><p>Preview scroll down</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-u&gt;</span></code></p></td>
+<td><p>Preview scroll up</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="fzf-search-syntax">
+<h2>FZF Search Syntax<a class="headerlink" href="#fzf-search-syntax" title="Link to this heading">¶</a></h2>
+<p>Type in FZF to filter results:</p>
+<p><strong>Exact match</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&#39;myfile
+</pre></div>
+</div>
+<p>Include only results with “myfile” (case-sensitive).</p>
+<p><strong>Invert match</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>!test
+</pre></div>
+</div>
+<p>Exclude results containing “test”.</p>
+<p><strong>Multiple terms</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>foo bar
+</pre></div>
+</div>
+<p>Results matching both “foo” AND “bar”.</p>
+<p><strong>Or match</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>foo | bar
+</pre></div>
+</div>
+<p>Results matching “foo” OR “bar”.</p>
+<p><strong>Regex match</strong> (advanced):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>^main
+</pre></div>
+</div>
+<p>Results starting with “main”.</p>
+</section>
+<section id="common-fzf-patterns">
+<h2>Common FZF Patterns<a class="headerlink" href="#common-fzf-patterns" title="Link to this heading">¶</a></h2>
+<p><strong>Find test files</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">f</span><span class="p">&gt;</span>
+test_
+</pre></div>
+</div>
+<p>Filter shows all test files.</p>
+<p><strong>Find by extension</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">f</span><span class="p">&gt;</span>
+.<span class="k">py</span>
+</pre></div>
+</div>
+<p>Shows all Python files (note the dot).</p>
+<p><strong>Find with path</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">f</span><span class="p">&gt;</span>
+<span class="k">lua</span>/plugin
+</pre></div>
+</div>
+<p>Shows files in <code class="docutils literal notranslate"><span class="pre">lua/plugin/</span></code> directory.</p>
+<p><strong>Find Python files in a directory</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">f</span><span class="p">&gt;</span>
+src/ .<span class="k">py</span>
+</pre></div>
+</div>
+<p>Shows Python files in <code class="docutils literal notranslate"><span class="pre">src/</span></code>.</p>
+<p><strong>Exclude directories</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">f</span><span class="p">&gt;</span>
+<span class="p">!</span>node_modules
+</pre></div>
+</div>
+<p>Excludes files in <code class="docutils literal notranslate"><span class="pre">node_modules/</span></code>.</p>
+</section>
+<section id="opening-files-multiple-ways">
+<h2>Opening Files Multiple Ways<a class="headerlink" href="#opening-files-multiple-ways" title="Link to this heading">¶</a></h2>
+<p>In FZF, you can open selected file in different ways:</p>
+<p><strong>Normal (vertical split)</strong>:</p>
+<p>Press <code class="docutils literal notranslate"><span class="pre">Enter</span></code> - opens in current window (or vertical split if already occupied).</p>
+<p><strong>Horizontal split</strong>:</p>
+<p>Press <code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;</span></code> - opens in horizontal split (side by side).</p>
+<p><strong>Vertical split</strong>:</p>
+<p>Press <code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code> - opens in vertical split (top and bottom).</p>
+<p><strong>New tab</strong>:</p>
+<p>Press <code class="docutils literal notranslate"><span class="pre">&lt;C-t&gt;</span></code> - opens in new tab.</p>
+<p><strong>Use case</strong>:</p>
+<ol class="arabic simple">
+<li><p>Open <code class="docutils literal notranslate"><span class="pre">main.py</span></code> in current window with <code class="docutils literal notranslate"><span class="pre">Enter</span></code></p></li>
+<li><p>Open <code class="docutils literal notranslate"><span class="pre">test_main.py</span></code> with <code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code> to see both files</p></li>
+</ol>
+</section>
+<section id="tips-and-tricks">
+<h2>Tips and Tricks<a class="headerlink" href="#tips-and-tricks" title="Link to this heading">¶</a></h2>
+<p><strong>Quick navigation</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">f</span><span class="p">&gt;</span>
+main.<span class="k">py</span>
+<span class="p">&lt;</span>Enter<span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Opens <code class="docutils literal notranslate"><span class="pre">main.py</span></code> in under a second (instead of browsing directories).</p>
+<p><strong>Search file contents for function</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>leader<span class="p">&gt;</span><span class="k">r</span>
+<span class="nb">def</span> my_function
+</pre></div>
+</div>
+<p>Lists all occurrences of the function definition.</p>
+<p><strong>Find recently edited files</strong>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span>C<span class="p">-</span><span class="k">b</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Lists open buffers - shows recently edited files first.</p>
+<p><strong>Open multiple files at once</strong>:</p>
+<ol class="arabic simple">
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> to find files</p></li>
+<li><p>Select first file</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code> to open in split</p></li>
+<li><p>Go back to FZF (use file switcher)</p></li>
+<li><p>Select another file</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;</span></code> to open in horizontal split</p></li>
+</ol>
+</section>
+<section id="performance">
+<h2>Performance<a class="headerlink" href="#performance" title="Link to this heading">¶</a></h2>
+<p>FZF is very fast even in large projects because:</p>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">ripgrep</span></code> for efficient searching</p></li>
+<li><p>Matches happen in real-time</p></li>
+<li><p>Scales to 100,000+ files</p></li>
+<li><p>Only searches tracked git files by default</p></li>
+</ul>
+<p><strong>Large project tip</strong>: Use <code class="docutils literal notranslate"><span class="pre">&lt;C-g&gt;</span></code> (git files) instead of <code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> (all files) in big projects.</p>
+</section>
+<section id="customization">
+<h2>Customization<a class="headerlink" href="#customization" title="Link to this heading">¶</a></h2>
+<p>FZF is configured in <code class="docutils literal notranslate"><span class="pre">lua/plugin/fzf-lua.lua</span></code>. You can customize:</p>
+<ul class="simple">
+<li><p>Preview window size</p></li>
+<li><p>Search paths (what to ignore)</p></li>
+<li><p>Colors</p></li>
+<li><p>Keybindings</p></li>
+</ul>
+<p>See <a class="reference internal" href="customization.html"><span class="doc">Customization</span></a> for modification examples.</p>
+</section>
+<section id="fzf-vs-lsp-navigation">
+<h2>FZF vs LSP Navigation<a class="headerlink" href="#fzf-vs-lsp-navigation" title="Link to this heading">¶</a></h2>
+<p>When to use each:</p>
+<p><strong>Use FZF</strong> (<code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;r</span></code>) for:</p>
+<ul class="simple">
+<li><p>Finding files by name</p></li>
+<li><p>Searching file contents</p></li>
+<li><p>Finding patterns across project</p></li>
+<li><p>Broad searches</p></li>
+</ul>
+<p><strong>Use LSP</strong> (<code class="docutils literal notranslate"><span class="pre">gd</span></code>, <code class="docutils literal notranslate"><span class="pre">gr</span></code>) for:</p>
+<ul class="simple">
+<li><p>Going to definition</p></li>
+<li><p>Finding references</p></li>
+<li><p>Code-aware navigation</p></li>
+<li><p>Refactoring</p></li>
+</ul>
+<p><strong>Example workflow</strong>:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> - Find file “utils.py”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gd</span></code> - Jump to function definition in utils.py</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gr</span></code> - Find all places using that function</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;r</span></code> - Search for a specific usage pattern</p></li>
+</ol>
+</section>
+<section id="integration-with-project">
+<h2>Integration with Project<a class="headerlink" href="#integration-with-project" title="Link to this heading">¶</a></h2>
+<p>FZF respects your project structure:</p>
+<ul class="simple">
+<li><p>Ignores files in <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code></p></li>
+<li><p>Searches git-tracked files</p></li>
+<li><p>Excludes build directories automatically</p></li>
+<li><p>Works with git submodules</p></li>
+</ul>
+<p><strong>Set search paths</strong> in <code class="docutils literal notranslate"><span class="pre">lua/plugin/fzf-lua.lua</span></code> to customize what FZF searches.</p>
+</section>
+<section id="common-issues">
+<h2>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">¶</a></h2>
+<p><strong>FZF not responding</strong>:</p>
+<p>Ensure FZF is installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>fzf<span class="w"> </span>ripgrep<span class="w">  </span><span class="c1"># macOS</span>
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>fzf<span class="w"> </span>ripgrep<span class="w">  </span><span class="c1"># Linux</span>
+</pre></div>
+</div>
+<p><strong>Slow searches</strong>:</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">&lt;C-g&gt;</span></code> (git files) instead of <code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> (all files) to skip untracked files.</p>
+<p><strong>Preview not showing</strong>:</p>
+<p>Press <code class="docutils literal notranslate"><span class="pre">?</span></code> in FZF to toggle preview on.</p>
+<p><strong>Search results incomplete</strong>:</p>
+<p>Check <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> - FZF respects ignored files. Use <code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> (all files) to override.</p>
+<p>See <a class="reference internal" href="troubleshooting.html"><span class="doc">Troubleshooting</span></a> for more help.</p>
+</section>
+<section id="keyboard-shortcuts-summary">
+<h2>Keyboard Shortcuts Summary<a class="headerlink" href="#keyboard-shortcuts-summary" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code></p></td>
+<td><p>Find files</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-b&gt;</span></code></p></td>
+<td><p>Switch buffers</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-g&gt;</span></code></p></td>
+<td><p>Search git files</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;r</span></code></p></td>
+<td><p>Search file contents</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;s</span></code></p></td>
+<td><p>Search in selection</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In FZF menu:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Enter</span></code></p></td>
+<td><p>Open in current window</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;</span></code></p></td>
+<td><p>Open in horizontal split</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code></p></td>
+<td><p>Open in vertical split</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-t&gt;</span></code></p></td>
+<td><p>Open in new tab</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="structure.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Configuration Structure</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="lsp_features.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">LSP Features</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, Clinton Steiner
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">FZF Guide</a><ul>
+<li><a class="reference internal" href="#what-is-fzf">What is FZF?</a></li>
+<li><a class="reference internal" href="#why-fzf">Why FZF?</a></li>
+<li><a class="reference internal" href="#finding-files">Finding Files</a></li>
+<li><a class="reference internal" href="#switching-buffers">Switching Buffers</a></li>
+<li><a class="reference internal" href="#searching-git-files">Searching Git Files</a></li>
+<li><a class="reference internal" href="#searching-file-contents">Searching File Contents</a></li>
+<li><a class="reference internal" href="#searching-in-selection">Searching in Selection</a></li>
+<li><a class="reference internal" href="#using-fzf-preview">Using FZF Preview</a></li>
+<li><a class="reference internal" href="#fzf-keybindings">FZF Keybindings</a></li>
+<li><a class="reference internal" href="#fzf-search-syntax">FZF Search Syntax</a></li>
+<li><a class="reference internal" href="#common-fzf-patterns">Common FZF Patterns</a></li>
+<li><a class="reference internal" href="#opening-files-multiple-ways">Opening Files Multiple Ways</a></li>
+<li><a class="reference internal" href="#tips-and-tricks">Tips and Tricks</a></li>
+<li><a class="reference internal" href="#performance">Performance</a></li>
+<li><a class="reference internal" href="#customization">Customization</a></li>
+<li><a class="reference internal" href="#fzf-vs-lsp-navigation">FZF vs LSP Navigation</a></li>
+<li><a class="reference internal" href="#integration-with-project">Integration with Project</a></li>
+<li><a class="reference internal" href="#common-issues">Common Issues</a></li>
+<li><a class="reference internal" href="#keyboard-shortcuts-summary">Keyboard Shortcuts Summary</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>
