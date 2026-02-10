@@ -38,4 +38,30 @@ luac.out
 *.i*86
 *.x86_64
 *.hex
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+template.md
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# Python cache
+.pytest_cache/
+__pycache__/
 
