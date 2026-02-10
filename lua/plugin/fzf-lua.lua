@@ -1,4 +1,11 @@
 local actions = require'fzf-lua.actions'
+
+-- Define a fallback highlight group for FZF if NotifyDEBUGTitle doesn't exist
+local fzf_hl = "Statement"
+if vim.fn.hlID("NotifyDEBUGTitle") ~= 0 then
+    fzf_hl = "NotifyDEBUGTitle"
+end
+
 require'fzf-lua'.setup {
     actions = {
         files = {
@@ -13,12 +20,12 @@ require'fzf-lua'.setup {
     fzf_colors = {
         ["fg"] = {"fg", "Normal"},
         ["bg"] = {"bg", "Normal"},
-        ["hl"] = {"fg", "NotifyDEBUGTitle"},
-        ["fg+"] = {"fg", "NotifyDEBUGTitle"},
+        ["hl"] = {"fg", fzf_hl},
+        ["fg+"] = {"fg", fzf_hl},
         ["bg+"] = {"bg", "CursorLine"},
         ["hl+"] = {"fg", "CursorLineNr"},
         ["info"] = {"fg", "Identifier"},
-        ["prompt"] = {"fg", "NotifyDEBUGTitle"},
+        ["prompt"] = {"fg", fzf_hl},
         ["pointer"] = {"fg", "Normal"},
         ["marker"] = {"fg", "Identifier"},
         ["spinner"] = {"fg", "Identifier"},

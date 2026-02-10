@@ -24,7 +24,7 @@ local function get_ts_nodes()
   end
   -- Create Leap targets from TS nodes.
   local targets = {}
-  local startline, startcol
+  local startline, startcol, endline, endcol
   for _, node in ipairs(nodes) do
     startline, startcol, endline, endcol = node:range()  -- (0,0)
     local startpos = { startline + 1, startcol + 1 }
@@ -40,7 +40,7 @@ local function get_ts_nodes()
   if #targets >= 1 then return targets end
 end
 
-local function select_node_range(target)
+local function select_node_range(target)  -- luacheck: ignore 211
   local mode = api.nvim_get_mode().mode
   -- Force going back to Normal from Visual mode.
   if not mode:match('no?') then vim.cmd('normal! ' .. mode) end

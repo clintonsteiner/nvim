@@ -32,8 +32,9 @@ vim.opt.completeopt = { 'menuone,noselect,popup' }
 vim.opt.pumheight = 20
 
 -- zuban lsp server
+local nvim_venv = vim.env.NVIM_VENV or (vim.env.HOME .. '/.virtualenvs/nvim')
 vim.lsp.config["zuban"] = {
-    cmd = { vim.env.HOME .. '/.virtualenvs/nvim/bin/zuban', 'server' },
+    cmd = { nvim_venv .. '/bin/zuban', 'server' },
     root_dir = vim.lsp.util.root_pattern('.git', 'pyproject.toml', 'setup.py'),
     filetypes = { "python" },
     settings = {},
@@ -66,7 +67,7 @@ vim.lsp.enable("zuban")
 
 -- ruff lsp server
 vim.lsp.config["ruff"] = {
-    cmd = { vim.env.HOME .. '/.virtualenvs/nvim/bin/ruff', 'server' },
+    cmd = { nvim_venv .. '/bin/ruff', 'server' },
     root_dir = vim.lsp.util.root_pattern('.git', 'pyproject.toml', 'setup.py'),
     filetypes = { "python" },
     init_options = {
