@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nvim-environment"
+version = "0.1.0"
+description = "Python environment for Neovim with LSP support"
+requires-python = ">=3.8"
+dependencies = [
+    "pynvim>=0.4.3",
+    "zuban>=0.2.0",
+    "ruff>=0.1.0",
+    "darker[isort]>=1.7.0",
+]

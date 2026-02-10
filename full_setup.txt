@@ -1,0 +1,100 @@
+Setting up Neovim (v0.11.4) from scratch
+
+1. Install Neovim (v0.11.4):
+    a. `mkdir -p ~/apps/neovim && cd ~/apps/neovim`
+    b. `curl -L -O https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.appimage`
+    c. `chmod u+x nvim.appimage`
+
+2. Create a Python virtual environment:
+    a. `mkdir -p ~/.virtualenvs && cd ~/.virtualenvs`
+    b. `python3 -m venv nvim`
+
+3. Clone the configuration template:
+    a. `mkdir -p ~/dotfiles && cd ~/dotfiles`
+    b. `git clone https://github.com/benewberg/nvim_config.git nvim`
+
+4. Install Python dependencies for Neovim and the LSP:
+    a. `cd ~/.virtualenvs/nvim && source bin/activate`
+    b. `pip install pynvim`  # https://github.com/neovim/pynvim
+    c. `pip install zuban`   # https://github.com/zubanls/zuban
+    d. `pip install ruff`
+    e. `pip install darker[isort]`  # https://github.com/akaihola/darker
+    f. `deactivate`
+
+5. Create symlinks to the Neovim configuration:
+    a. `mkdir -p ~/.config/nvim`
+    b. `ln -sf ~/dotfiles/nvim/init.lua ~/.config/nvim/init.lua`
+    c. `ln -sf ~/dotfiles/nvim/lua ~/.config/nvim/lua`
+
+6. Create a launch script for Neovim:
+    a. `mkdir -p ~/.local/bin`
+    b. Create ~/.local/bin/nvim with the following content:
+    ```
+    #!/usr/bin/env bash
+    ~/apps/neovim/nvim.appimage "$@"
+    ```
+    c. `chmod u+x ~/.local/bin/nvim`
+    d. Ensure ~/.local/bin is in your PATH
+
+7. Install Neovim plugins:
+    a. Launch Neovim: `nvim`
+    b. Run: `:PlugInstall` and wait for completion
+    c. Exit and relaunch Neovim
+
+8. Install Treesitter language support:
+    a. In Neovim, run: `:TSInstall python lua comment vim vimdoc c sql query` (add other languages as needed)
+
+Troubleshooting:
+
+* If the nvim.appimage binary fails to execute, install FUSE:
+    a. `sudo apt-get install fuse`
+
+* If fzf is not installed:
+    a. `git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf`
+    b. `~/.fzf/install`
+    c. Accept defaults at the three prompts
+    d. Source your shell config: `. ~/.bashrc`
+
+* If ripgrep is not installed:
+    a. `sudo apt-get install ripgrep`
+
+* Run `:checkhealth` in Neovim to diagnose other issues
+
+* If Treesitter reports issues:
+    a. Run: `:TSInstall python lua comment vim vimdoc c sql query` (and any other languages you need)
+
+Optional Configuration:
+
+* Set Neovim as the default Git editor:
+    a. `git config --global core.editor nvim`
+
+* Set Neovim as the default psql editor:
+    a. Add to ~/.bashrc: `export PSQL_EDITOR=nvim`
+    b. Source your shell config: `. ~/.bashrc`
+
+* Install a Nerd Font (IntelOneMono example):
+    a. https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/IntelOneMono
+
+Optional Rust Tools:
+
+* Install Cargo (Rust package manager):
+    a. `sudo apt-get install cargo`
+
+* eza (modern replacement for ls -- https://github.com/eza-community/eza):
+    a. `cargo install eza`
+    b. Add to ~/.bashrc:
+    ```
+        alias ll='eza --long --icons'
+        alias lll='eza --long --tree --icons'
+    ```
+    c. Source your shell config
+
+* fd (user-friendly alternative to find -- https://github.com/sharkdp/fd):
+    a. `cargo install fd-find`
+
+* ctags (for code navigation):
+    a. `sudo apt-get install ctags`
+    b. Verify installation: `ctags --version`
+    c. Generate tags file: `ctags -R --languages=python -f ~/.config/nvim/tags /HIGHEST_GIT_LEVEL_PATH/.`
+    d. In Neovim, set: `vim.opt.tags = vim.env.HOME .. '/.config/nvim/tags'`
+    e. Use `:FzfLua tags` or `:FzfLua tags_live_grep` if fzf-lua is installed
