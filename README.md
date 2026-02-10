@@ -20,7 +20,7 @@ A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python develo
 The easiest way to set up this configuration:
 
 ```bash
-git clone https://github.com/clintonsteiner/nvim_config.git ~/dotfiles/nvim
+git clone https://github.com/clintonsteiner/nvim.git ~/dotfiles/nvim
 cd ~/dotfiles/nvim
 python3 install.py
 ```
@@ -42,7 +42,7 @@ If you prefer manual setup, see [DEVELOPMENT.md](DEVELOPMENT.md) for step-by-ste
 ## Configuration Structure
 
 ```
-nvim_config/
+nvim/
 ├── init.lua                    # Main entry point
 ├── lua/
 │   ├── autocmds.lua           # Autocommands and event handlers

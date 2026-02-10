@@ -141,7 +141,7 @@ Automated setup script that:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/clintonsteiner/nvim_config.git ~/dotfiles/nvim
+   git clone https://github.com/clintonsteiner/nvim.git ~/dotfiles/nvim
    ```
 
 2. Create symlinks to your Neovim config:
