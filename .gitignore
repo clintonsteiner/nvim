@@ -65,3 +65,7 @@ template.md
 .pytest_cache/
 __pycache__/
 *.egg-info/
+.venv/
+
+# local nvim logs
+.nvimlog

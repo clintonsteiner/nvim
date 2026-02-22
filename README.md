@@ -20,6 +20,24 @@ A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first 
 
 ## Quick Start
 
+### Try Without Changing Your Existing Neovim Config
+
+Run this config in an isolated temporary profile:
+
+```bash
+make try
+```
+
+This keeps your existing `~/.config/nvim` untouched.
+
+### Bootstrap Setup
+
+Run the interactive installer:
+
+```bash
+make bootstrap
+```
+
 ### Automated Installation
 
 The easiest way to set up this configuration:
