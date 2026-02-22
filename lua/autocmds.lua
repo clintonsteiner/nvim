@@ -53,13 +53,68 @@ local function has_lsp_client(bufnr)
     return #vim.lsp.get_clients({ bufnr = bufnr }) > 0
 end
 
+local function cmd_label(cmd)
+    if type(cmd) == "table" then
+        return tostring(cmd[1] or "")
+    end
+    return tostring(cmd or "")
+end
+
+local function configured_servers_for_ft(filetype)
+    local ok, configs = pcall(vim.lsp.get_configs)
+    if not ok or type(configs) ~= "table" then
+        return {}, {}
+    end
+
+    local available = {}
+    local missing = {}
+
+    for name, config in pairs(configs) do
+        local fts = config.filetypes or {}
+        if vim.tbl_contains(fts, filetype) then
+            local cmd = cmd_label(config.cmd)
+            local executable = cmd ~= "" and vim.fn.executable(cmd) == 1
+            if executable then
+                table.insert(available, name)
+            else
+                table.insert(missing, name)
+            end
+        end
+    end
+
+    table.sort(available)
+    table.sort(missing)
+    return available, missing
+end
+
 local function notify_missing_lsp(bufnr)
     local ok, warned = pcall(vim.api.nvim_buf_get_var, bufnr, "lsp_missing_warned")
     if ok and warned then
         return
     end
     pcall(vim.api.nvim_buf_set_var, bufnr, "lsp_missing_warned", true)
-    vim.notify("No LSP client attached for this buffer. Run :LspInfo or :CheckDevEnv.", vim.log.levels.WARN)
+
+    local ft = vim.bo[bufnr].filetype
+    local available, missing = configured_servers_for_ft(ft)
+    if #available == 0 and #missing == 0 then
+        return
+    end
+
+    if #available > 0 then
+        vim.notify(
+            "No LSP client attached for '" .. ft .. "'. Configured servers: " .. table.concat(available, ", ")
+                .. ". Run :LspInfo.",
+            vim.log.levels.WARN
+        )
+        return
+    end
+
+    vim.notify(
+        "No LSP client attached for '" .. ft .. "'. Missing binaries for: "
+            .. table.concat(missing, ", ")
+            .. ". Run :CheckDevEnv.",
+        vim.log.levels.WARN
+    )
 end
 
 local function map_lsp(bufnr, lhs, rhs, desc)
@@ -103,11 +158,15 @@ vim.api.nvim_create_autocmd("FileType", {
     },
     callback = function(args)
         local bufnr = args.buf
+        local delay_ms = tonumber(vim.g.lsp_missing_warn_delay_ms) or 2500
+        if vim.g.lsp_missing_warn_enabled == false then
+            return
+        end
         vim.defer_fn(function()
             if vim.api.nvim_buf_is_valid(bufnr) and not has_lsp_client(bufnr) then
                 notify_missing_lsp(bufnr)
             end
-        end, 1200)
+        end, delay_ms)
     end,
 })
 
