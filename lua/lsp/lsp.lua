@@ -173,6 +173,14 @@ register_server("jsonls", {
     capabilities = capabilities,
 })
 
+-- yaml language server
+register_server("yamlls", {
+    cmd = resolve_cmd("yaml-language-server", { "--stdio" }),
+    root_dir = root_with_fallback('.yamllint', '.git'),
+    filetypes = { "yaml" },
+    capabilities = capabilities,
+})
+
 -- turn off diagnostics by default
 vim.diagnostic.config({
     virtual_text = false,

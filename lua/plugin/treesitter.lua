@@ -15,6 +15,7 @@ ts.setup {
         'rust',
         'java',
         'json',
+        'yaml',
         'vim',
         'vimdoc',
         'lua',

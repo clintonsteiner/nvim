@@ -14,6 +14,7 @@ mason_lspconfig.setup({
         "rust_analyzer",
         "jdtls",
         "jsonls",
+        "yamlls",
     },
     automatic_installation = true,
 })

@@ -39,6 +39,12 @@ require("lazy").setup({
             "java",
             "json",
             "jsonc",
+            "yaml",
+            "sh",
+            "bash",
+            "zsh",
+            "toml",
+            "markdown",
         },
         config = function()
             require("lsp")
