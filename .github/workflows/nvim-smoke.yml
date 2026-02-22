@@ -1,0 +1,53 @@
+name: Neovim Smoke Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Warm plugin cache
+        env:
+          XDG_CONFIG_HOME: ${{ github.workspace }}
+          XDG_DATA_HOME: ${{ runner.temp }}/xdg-data
+          XDG_STATE_HOME: ${{ runner.temp }}/xdg-state
+          XDG_CACHE_HOME: ${{ runner.temp }}/xdg-cache
+        run: |
+          nvim --headless -u init.lua "+Lazy! sync" "+qa"
+
+      - name: Smoke open key filetypes
+        env:
+          XDG_CONFIG_HOME: ${{ github.workspace }}
+          XDG_DATA_HOME: ${{ runner.temp }}/xdg-data
+          XDG_STATE_HOME: ${{ runner.temp }}/xdg-state
+          XDG_CACHE_HOME: ${{ runner.temp }}/xdg-cache
+        run: |
+          touch /tmp/smoke.py /tmp/smoke.go /tmp/smoke.ts /tmp/smoke.rs /tmp/smoke.cpp /tmp/smoke.java /tmp/smoke.sql /tmp/smoke.groovy /tmp/smoke.json
+          nvim --headless -u init.lua \
+            "+edit /tmp/smoke.py" \
+            "+edit /tmp/smoke.go" \
+            "+edit /tmp/smoke.ts" \
+            "+edit /tmp/smoke.rs" \
+            "+edit /tmp/smoke.cpp" \
+            "+edit /tmp/smoke.java" \
+            "+edit /tmp/smoke.sql" \
+            "+edit /tmp/smoke.groovy" \
+            "+edit /tmp/smoke.json" \
+            "+qa"

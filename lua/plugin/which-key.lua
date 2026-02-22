@@ -9,7 +9,7 @@ wk.add({
     { "<leader>:", ":source ~/.local/share/nvim/sessions/init<CR>", desc = "open init" },
     { "<leader>?", "<cmd>lua require('fzf-lua').lines({fzf_cli_args = '--with-nth 2..'})<CR>", desc = "lines" },
     { "<leader>h", "<cmd>lua require('fzf-lua').help_tags()<CR>", desc = "help" },
-    { "<leader>s", ":lua save_session()<CR>", desc = "save session" },
+    { "<leader>s", "<cmd>lua require('utils.core').save_session()<CR>", desc = "save session" },
     { "<leader>w", ":w<CR>", desc = "save" },
     { "<leader>z", "<cmd>lua require('fzf-lua').builtin()<CR>", desc = "fzf builtins" },
 
@@ -78,9 +78,9 @@ wk.add({
     { "<leader>rr", "<cmd>lua require('fzf-lua').grep_cword({multiline = 2})<CR>", desc = "rg word under cursor" },
 
     { "<leader>t", group = "toggles" },
-    { "<leader>td", "<cmd>lua toggle_diagnostics()<CR>", desc = "diagnostics" },
+    { "<leader>td", "<cmd>lua require('utils.core').toggle_diagnostics()<CR>", desc = "diagnostics" },
     { "<leader>ti", ":IBLToggle<CR>", desc = "indents" },
-    { "<leader>tw", "<cmd>lua toggle_text_wrap()<CR>", desc = "text wrap" },
+    { "<leader>tw", "<cmd>lua require('utils.core').toggle_text_wrap()<CR>", desc = "text wrap" },
 
     {
         mode = { "v" },
