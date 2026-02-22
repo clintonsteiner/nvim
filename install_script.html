@@ -201,6 +201,7 @@
 <p class="caption" role="heading"><span class="caption-text">Usage Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Suggested Workflows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_workflow.html">Python Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lsp_features.html">LSP Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fzf_guide.html">FZF Guide</a></li>
@@ -289,6 +290,7 @@ Continue with next step? (y/n): y
 <ol class="arabic simple">
 <li><p>Neovim v0.11.4</p></li>
 <li><p>Python virtual environment with required packages</p></li>
+<li><p>JetBrains Mono Nerd Font</p></li>
 <li><p>Configuration symlinks</p></li>
 <li><p>Treesitter language parsers</p></li>
 <li><p>Optional: Rust tools (Linux only)</p></li>
@@ -341,15 +343,23 @@ Continue with next step? (y/n): y
 <li><p>darker</p></li>
 </ul>
 <p>Uses <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span></code> for speed.</p>
-<p><strong>Step 6: Create Symlinks</strong></p>
+<p><strong>Step 6: Install Nerd Font</strong></p>
+<p>Installs JetBrains Mono Nerd Font for icon rendering:</p>
+<ul class="simple">
+<li><p><strong>macOS</strong>: Uses Homebrew cask (<cite>font-jetbrains-mono-nerd-font</cite>) when available</p></li>
+<li><p><strong>Linux</strong>: Downloads and extracts to <code class="docutils literal notranslate"><span class="pre">~/.local/share/fonts/NerdFonts/JetBrainsMono</span></code></p></li>
+<li><p>Refreshes font cache on Linux when <code class="docutils literal notranslate"><span class="pre">fc-cache</span></code> is available</p></li>
+</ul>
+<p>After install, set your terminal font to JetBrains Mono Nerd Font.</p>
+<p><strong>Step 7: Create Symlinks</strong></p>
 <p>Links configuration to Neovim config directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln<span class="w"> </span>-s<span class="w"> </span>~/dotfiles/nvim/init.lua<span class="w"> </span>~/.config/nvim/init.lua
 ln<span class="w"> </span>-s<span class="w"> </span>~/dotfiles/nvim/lua<span class="w"> </span>~/.config/nvim/lua
 </pre></div>
 </div>
-<p><strong>Step 7: Create Launch Script</strong></p>
+<p><strong>Step 8: Create Launch Script</strong></p>
 <p>Creates <code class="docutils literal notranslate"><span class="pre">~/.local/bin/nvim</span></code> for easy launching.</p>
-<p><strong>Step 8: Install Treesitter</strong></p>
+<p><strong>Step 9: Install Treesitter</strong></p>
 <p>Installs syntax highlighting parsers:</p>
 <ul class="simple">
 <li><p>python</p></li>
@@ -361,7 +371,7 @@ ln<span class="w"> </span>-s<span class="w"> </span>~/dotfiles/nvim/lua<span cla
 <li><p>sql</p></li>
 <li><p>query</p></li>
 </ul>
-<p><strong>Step 9: Install Rust Tools</strong> (Linux only)</p>
+<p><strong>Step 10: Install Rust Tools</strong> (Linux only)</p>
 <p>Optionally installs:</p>
 <ul class="simple">
 <li><p>eza (modern ls replacement)</p></li>
@@ -416,6 +426,7 @@ ln<span class="w"> </span>-s<span class="w"> </span>~/dotfiles/nvim/lua<span cla
 <li><p><code class="docutils literal notranslate"><span class="pre">setup_venv</span></code> - Create Python environment</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">clone_config</span></code> - Clone this configuration</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">install_python_packages</span></code> - Install dependencies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">install_nerd_font</span></code> - Install JetBrains Mono Nerd Font</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">create_symlinks</span></code> - Link config files</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">create_launch_script</span></code> - Create launcher</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">install_treesitter</span></code> - Install language parsers</p></li>

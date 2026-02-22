@@ -20,10 +20,12 @@ The ``install.py`` script will guide you through an interactive setup process an
 1. **Creating necessary directories** - Creates `~/.config/nvim`, `~/.virtualenvs`, and other required paths
 2. **Installing Neovim v0.11.4** - Uses Homebrew on macOS or downloads the binary directly
 3. **Setting up a Python virtual environment** - Creates an isolated Python environment using ``uv``
-4. **Installing Python dependencies** - Sets up all required Python packages (pynvim, zuban, ruff, darker)
-5. **Creating symlinks** - Links the configuration to your Neovim config directory
-6. **Installing Treesitter** - Downloads language parsers for syntax highlighting
-7. **Optional: Installing Rust tools** - Installs eza, fd, and ctags (Linux only)
+4. **Cloning this configuration** - Clones the repository to ``~/dotfiles/nvim``
+5. **Installing Python dependencies** - Sets up all required Python packages (pynvim, zuban, ruff, darker)
+6. **Installing Nerd Font** - Installs JetBrains Mono Nerd Font for icon support
+7. **Creating symlinks** - Links the configuration to your Neovim config directory
+8. **Installing Treesitter** - Downloads language parsers for syntax highlighting
+9. **Optional: Installing Rust tools** - Installs eza, fd, and ctags (Linux only)
 
 Manual Installation
 ===================

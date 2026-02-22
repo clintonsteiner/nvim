@@ -36,9 +36,10 @@ The script is interactive - you'll be prompted for each step:
 
 1. Neovim v0.11.4
 2. Python virtual environment with required packages
-3. Configuration symlinks
-4. Treesitter language parsers
-5. Optional: Rust tools (Linux only)
+3. JetBrains Mono Nerd Font
+4. Configuration symlinks
+5. Treesitter language parsers
+6. Optional: Rust tools (Linux only)
 
 Installation Steps
 ==================
@@ -97,7 +98,17 @@ Installs into the virtual environment:
 
 Uses ``uv pip install`` for speed.
 
-**Step 6: Create Symlinks**
+**Step 6: Install Nerd Font**
+
+Installs JetBrains Mono Nerd Font for icon rendering:
+
+- **macOS**: Uses Homebrew cask (`font-jetbrains-mono-nerd-font`) when available
+- **Linux**: Downloads and extracts to ``~/.local/share/fonts/NerdFonts/JetBrainsMono``
+- Refreshes font cache on Linux when ``fc-cache`` is available
+
+After install, set your terminal font to JetBrains Mono Nerd Font.
+
+**Step 7: Create Symlinks**
 
 Links configuration to Neovim config directory:
 
@@ -106,11 +117,11 @@ Links configuration to Neovim config directory:
     ln -s ~/dotfiles/nvim/init.lua ~/.config/nvim/init.lua
     ln -s ~/dotfiles/nvim/lua ~/.config/nvim/lua
 
-**Step 7: Create Launch Script**
+**Step 8: Create Launch Script**
 
 Creates ``~/.local/bin/nvim`` for easy launching.
 
-**Step 8: Install Treesitter**
+**Step 9: Install Treesitter**
 
 Installs syntax highlighting parsers:
 
@@ -123,7 +134,7 @@ Installs syntax highlighting parsers:
 - sql
 - query
 
-**Step 9: Install Rust Tools** (Linux only)
+**Step 10: Install Rust Tools** (Linux only)
 
 Optionally installs:
 
@@ -194,6 +205,7 @@ Main class handling all setup operations.
 - ``setup_venv`` - Create Python environment
 - ``clone_config`` - Clone this configuration
 - ``install_python_packages`` - Install dependencies
+- ``install_nerd_font`` - Install JetBrains Mono Nerd Font
 - ``create_symlinks`` - Link config files
 - ``create_launch_script`` - Create launcher
 - ``install_treesitter`` - Install language parsers

@@ -201,6 +201,7 @@
 <p class="caption" role="heading"><span class="caption-text">Usage Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Suggested Workflows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_workflow.html">Python Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lsp_features.html">LSP Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fzf_guide.html">FZF Guide</a></li>
@@ -306,14 +307,23 @@
 <p class="caption" role="heading"><span class="caption-text">Usage Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="keybindings.html">Keybindings</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#core-navigation">Core Navigation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#python-development">Python Development</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#text-manipulation">Text Manipulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#standard-vim-bindings">Standard Vim Bindings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#customizing-keybindings">Customizing Keybindings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#fzf-specific-bindings">FZF-specific Bindings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#quick-reference-card">Quick Reference Card</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keybindings.html#tips">Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keybindings.html#daily-essentials">Daily Essentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keybindings.html#code-navigation">Code Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keybindings.html#git-and-rebase">Git and Rebase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keybindings.html#project-setup-commands">Project Setup Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Suggested Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#start-here-default-loop">Start Here (Default Loop)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#daily-coding-loop">Daily Coding Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#stuck-debug-loop">Stuck/Debug Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#go-workflow">Go Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#python-workflow">Python Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#git-rebase-on-top-of-master">Git Rebase On Top of Master</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#refactor-workflow">Refactor Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#tmux-neovim">tmux + Neovim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#memory-cheat-sheet">Memory Cheat Sheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#project-overrides">Project Overrides</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python_workflow.html">Python Workflow</a><ul>
@@ -429,18 +439,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#plugin-list">Plugin List</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#detailed-plugin-descriptions">Detailed Plugin Descriptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#why-these-plugins">Why These Plugins?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#plugin-management">Plugin Management</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#adding-a-plugin">Adding a Plugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#removing-a-plugin">Removing a Plugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#replacing-a-plugin">Replacing a Plugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#plugin-compatibility">Plugin Compatibility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#performance-tips">Performance Tips</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#updating-plugins-safely">Updating Plugins Safely</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#recommended-reading">Recommended Reading</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html#common-plugin-tasks">Common Plugin Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html#core-editor-ux">Core Editor UX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html#language-and-refactoring">Language and Refactoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html#git-and-review-workflow">Git and Review Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html#theme-and-visuals">Theme and Visuals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html#operational-notes">Operational Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lsp_configuration.html">LSP Configuration</a><ul>

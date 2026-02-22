@@ -201,6 +201,7 @@
 <p class="caption" role="heading"><span class="caption-text">Usage Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Suggested Workflows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_workflow.html">Python Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lsp_features.html">LSP Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fzf_guide.html">FZF Guide</a></li>
@@ -509,7 +510,7 @@ sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w
 </div>
 </li>
 <li><p>If not installed, reinstall plugins:</p>
-<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>PlugInstall
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>Lazy <span class="k">sync</span>
 </pre></div>
 </div>
 </li>
@@ -786,7 +787,7 @@ sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w
 <ol class="arabic simple">
 <li><p><strong>Restart Neovim</strong> - Solves 30% of issues</p></li>
 <li><p><strong>Run ``:checkhealth``</strong> - Diagnoses most issues</p></li>
-<li><p><strong>Reinstall plugins</strong> - <code class="docutils literal notranslate"><span class="pre">:PlugClean</span></code> then <code class="docutils literal notranslate"><span class="pre">:PlugInstall</span></code></p></li>
+<li><p><strong>Reinstall plugins</strong> - <code class="docutils literal notranslate"><span class="pre">:Lazy</span> <span class="pre">clean</span></code> then <code class="docutils literal notranslate"><span class="pre">:Lazy</span> <span class="pre">sync</span></code></p></li>
 <li><p><strong>Check virtual environment</strong> - Python issues often here</p></li>
 <li><p><strong>View error messages</strong> - <code class="docutils literal notranslate"><span class="pre">:messages</span></code> shows what’s wrong</p></li>
 <li><p><strong>Check installation</strong> - Run <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">install.py</span></code> again</p></li>

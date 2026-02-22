@@ -88,9 +88,9 @@ Each plugin must justify its existence.
 
 **Why no plugin manager UI?**
 
-Plugin managers add complexity. vim-plug is simpler:
+Plugin manager workflows should stay simple:
 
-- Just call ``:PlugInstall``
+- Just call ``:Lazy sync``
 - Clear what's happening
 - Easy to understand
 - No abstraction layers

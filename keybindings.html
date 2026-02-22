@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Python Workflow" href="python_workflow.html"><link rel="prev" title="Requirements" href="requirements.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Suggested Workflows" href="workflows.html"><link rel="prev" title="Requirements" href="requirements.html">
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>Keybindings - Neovim Configuration 0.1.0 documentation</title>
@@ -201,6 +201,7 @@
 <p class="caption" role="heading"><span class="caption-text">Usage Guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Suggested Workflows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_workflow.html">Python Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lsp_features.html">LSP Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fzf_guide.html">FZF Guide</a></li>
@@ -262,10 +263,10 @@
         <article role="main" id="furo-main-content">
           <section id="keybindings">
 <h1>Keybindings<a class="headerlink" href="#keybindings" title="Link to this heading">¶</a></h1>
-<p>The leader key is <code class="docutils literal notranslate"><span class="pre">&lt;Space&gt;</span></code> by default. All keybindings are organized using <strong>which-key</strong>, which shows a popup menu when you press the leader key.</p>
-<p>Press <code class="docutils literal notranslate"><span class="pre">&lt;Space&gt;</span></code> and wait to see all available commands.</p>
-<section id="core-navigation">
-<h2>Core Navigation<a class="headerlink" href="#core-navigation" title="Link to this heading">¶</a></h2>
+<p>Leader key is <code class="docutils literal notranslate"><span class="pre">&lt;Space&gt;</span></code>.
+Use <code class="docutils literal notranslate"><span class="pre">which-key</span></code> by pressing <code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;</span></code> and pausing briefly.</p>
+<section id="daily-essentials">
+<h2>Daily Essentials<a class="headerlink" href="#daily-essentials" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -274,45 +275,77 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code></p></td>
-<td><p>Find files by name</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;of</span></code></p></td>
+<td><p>Open project files</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-b&gt;</span></code></p></td>
-<td><p>Switch between open buffers</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;ja</span></code></p></td>
+<td><p>Add current file to Harpoon</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-g&gt;</span></code></p></td>
-<td><p>Search in git files</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;j1..j4</span></code></p></td>
+<td><p>Jump to Harpoon slots</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;r</span></code></p></td>
-<td><p>Search file contents in project</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;mn</span></code></p></td>
+<td><p>Run nearest test (Go/Python)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;s</span></code></p></td>
-<td><p>Search in current selection</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;mt</span></code></p></td>
+<td><p>Run test task</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gd</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;ml</span></code></p></td>
+<td><p>Run lint task</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;mb</span></code></p></td>
+<td><p>Run build task</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;qo</span></code></p></td>
+<td><p>Open quickfix</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;qc</span></code></p></td>
+<td><p>Close quickfix</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="code-navigation">
+<h2>Code Navigation<a class="headerlink" href="#code-navigation" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gd</span></code></p></td>
 <td><p>Go to definition</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gD</span></code></p></td>
-<td><p>Go to declaration</p></td>
-</tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gr</span></code></p></td>
-<td><p>Find all references</p></td>
+<td><p>Find references</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gi</span></code></p></td>
-<td><p>Find implementations</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
+<td><p>Hover documentation</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
-<td><p>Show documentation/hover info</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;lo</span></code></p></td>
+<td><p>Toggle symbol outline (Aerial)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-k&gt;</span></code></p></td>
-<td><p>Show signature help (for functions)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;lO</span></code></p></td>
+<td><p>Toggle Aerial nav</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;ln</span></code></p></td>
+<td><p>Incremental rename</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;lS</span></code></p></td>
+<td><p>Smart format</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;lF</span></code></p></td>
+<td><p>LSP format</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="python-development">
-<h2>Python Development<a class="headerlink" href="#python-development" title="Link to this heading">¶</a></h2>
+<section id="git-and-rebase">
+<h2>Git and Rebase<a class="headerlink" href="#git-and-rebase" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -321,214 +354,40 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;t</span></code></p></td>
-<td><p>Run pytest on current file</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gg</span></code></p></td>
+<td><p>Git status picker</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;T</span></code></p></td>
-<td><p>Run specific test function</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gRm</span></code></p></td>
+<td><p>Rebase onto <code class="docutils literal notranslate"><span class="pre">origin/master</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;c</span></code></p></td>
-<td><p>Generate coverage report for module</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gRc</span></code></p></td>
+<td><p>Rebase continue</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;f</span></code></p></td>
-<td><p>Format file with darker</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gRa</span></code></p></td>
+<td><p>Rebase abort</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;rn</span></code></p></td>
-<td><p>Rename symbol (refactoring)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gRl</span></code></p></td>
+<td><p>List unresolved conflicts</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="text-manipulation">
-<h2>Text Manipulation<a class="headerlink" href="#text-manipulation" title="Link to this heading">¶</a></h2>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Key</p></th>
-<th class="head"><p>Action</p></th>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gU</span></code></p></td>
+<td><p>Fetch upstream (fallback origin)</p></td>
 </tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;w</span></code></p></td>
-<td><p>Toggle line wrapping</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gF</span></code></p></td>
+<td><p>Fetch <code class="docutils literal notranslate"><span class="pre">upstream</span></code> for fork workflows</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;d</span></code></p></td>
-<td><p>Toggle diagnostics display</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gPc</span></code></p></td>
+<td><p>Run PR checks (lint/test/build)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;ss</span></code></p></td>
-<td><p>Save current session</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;sl</span></code></p></td>
-<td><p>Load saved session</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;gPo</span></code></p></td>
+<td><p>Create PR via <code class="docutils literal notranslate"><span class="pre">gh</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="standard-vim-bindings">
-<h2>Standard Vim Bindings<a class="headerlink" href="#standard-vim-bindings" title="Link to this heading">¶</a></h2>
-<p>This configuration preserves standard Vim bindings:</p>
-<section id="navigation">
-<h3>Navigation<a class="headerlink" href="#navigation" title="Link to this heading">¶</a></h3>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Key</p></th>
-<th class="head"><p>Action</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">h/j/k/l</span></code></p></td>
-<td><p>Move cursor left/down/up/right</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">w/b</span></code></p></td>
-<td><p>Move to next/previous word</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gg</span></code></p></td>
-<td><p>Go to beginning of file</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">G</span></code></p></td>
-<td><p>Go to end of file</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
-<td><p>Search forward in file</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">?</span></code></p></td>
-<td><p>Search backward in file</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">n/N</span></code></p></td>
-<td><p>Go to next/previous search result</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="editing">
-<h3>Editing<a class="headerlink" href="#editing" title="Link to this heading">¶</a></h3>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Key</p></th>
-<th class="head"><p>Action</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i/a/o</span></code></p></td>
-<td><p>Insert/append/new line (enter insert)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">d</span></code></p></td>
-<td><p>Delete (motion following)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">y</span></code></p></td>
-<td><p>Yank (copy)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">p/P</span></code></p></td>
-<td><p>Paste after/before cursor</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">u</span></code></p></td>
-<td><p>Undo</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-r&gt;</span></code></p></td>
-<td><p>Redo</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&gt;&gt;/&lt;&lt;</span></code></p></td>
-<td><p>Indent/unindent line</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Example: <code class="docutils literal notranslate"><span class="pre">dw</span></code> deletes a word, <code class="docutils literal notranslate"><span class="pre">dd</span></code> deletes entire line, <code class="docutils literal notranslate"><span class="pre">yy</span></code> copies a line</p>
-</section>
-</section>
-<section id="customizing-keybindings">
-<h2>Customizing Keybindings<a class="headerlink" href="#customizing-keybindings" title="Link to this heading">¶</a></h2>
-<p>All keybindings are defined in <code class="docutils literal notranslate"><span class="pre">lua/plugin/which-key.lua</span></code>. To customize:</p>
-<ol class="arabic">
-<li><p>Open the file:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nvim<span class="w"> </span>lua/plugin/which-key.lua
-</pre></div>
-</div>
-</li>
-<li><p>Find the keybinding you want to change</p></li>
-<li><p>Edit the table to add or modify bindings</p></li>
-<li><p>Save and reload Neovim (or restart)</p></li>
-</ol>
-<p>Example: Adding a new keybinding</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- In lua/plugin/which-key.lua</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">wk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="p">(</span><span class="s2">&quot;which-key&quot;</span><span class="p">)</span>
-
-<span class="nv">wk</span><span class="p">.</span><span class="nf">add</span><span class="p">({</span>
-<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;&lt;leader&gt;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&lt;cmd&gt;MyCommand&lt;cr&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">desc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Description of my command&quot;</span><span class="w"> </span><span class="p">}</span>
-<span class="p">})</span>
-</pre></div>
-</div>
-</section>
-<section id="fzf-specific-bindings">
-<h2>FZF-specific Bindings<a class="headerlink" href="#fzf-specific-bindings" title="Link to this heading">¶</a></h2>
-<p>When in FZF (fuzzy finder), use:</p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Key</p></th>
-<th class="head"><p>Action</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-j&gt;/&lt;C-k&gt;</span></code></p></td>
-<td><p>Move down/up through results</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Enter</span></code></p></td>
-<td><p>Select highlighted item</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-c&gt;</span></code></p></td>
-<td><p>Cancel search</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;</span></code></p></td>
-<td><p>Open in horizontal split</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code></p></td>
-<td><p>Open in vertical split</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;C-t&gt;</span></code></p></td>
-<td><p>Open in new tab</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="quick-reference-card">
-<h2>Quick Reference Card<a class="headerlink" href="#quick-reference-card" title="Link to this heading">¶</a></h2>
-<p>Save this quick reference:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NAVIGATION
-&lt;C-f&gt;    Find files        &lt;leader&gt;r    Search content
-&lt;C-b&gt;    Buffers           gd           Goto definition
-&lt;C-g&gt;    Git files         gr           References
-
-PYTHON DEV
-&lt;leader&gt;t    Run tests      &lt;leader&gt;f    Format code
-&lt;leader&gt;T    Single test    &lt;leader&gt;c    Coverage
-
-EDITING
-dw       Delete word       yy           Copy line
-&lt;leader&gt;d    Toggle diags   &lt;leader&gt;w    Toggle wrap
-
-CORE VIM
-u        Undo              &lt;C-r&gt;        Redo
-/        Search            n/N          Next/prev match
-</pre></div>
-</div>
-</section>
-<section id="tips">
-<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading">¶</a></h2>
-<ol class="arabic simple">
-<li><p><strong>Use which-key discovery</strong> - Press <code class="docutils literal notranslate"><span class="pre">&lt;leader&gt;</span></code> and wait to see all options</p></li>
-<li><p><strong>Learn incrementally</strong> - Focus on a few bindings at a time</p></li>
-<li><p><strong>Use vim motions</strong> - Combine keys (e.g., <code class="docutils literal notranslate"><span class="pre">d5w</span></code> deletes 5 words)</p></li>
-<li><p><strong>Check with :map</strong> - Run <code class="docutils literal notranslate"><span class="pre">:map</span></code> in Neovim to see all mappings</p></li>
-<li><p><strong>Customize for your workflow</strong> - Add bindings for commands you use often</p></li>
-</ol>
-<p>See <a class="reference internal" href="customization.html"><span class="doc">Customization</span></a> for how to add your own keybindings.</p>
+<section id="project-setup-commands">
+<h2>Project Setup Commands<a class="headerlink" href="#project-setup-commands" title="Link to this heading">¶</a></h2>
+<p>See <a class="reference internal" href="workflows.html"><span class="doc">Suggested Workflows</span></a> for end-to-end usage patterns.</p>
 </section>
 </section>
 
@@ -537,12 +396,12 @@ u        Undo              &lt;C-r&gt;        Redo
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="python_workflow.html">
+          <a class="next-page" href="workflows.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Python Workflow</div>
+                <div class="title">Suggested Workflows</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -588,18 +447,10 @@ u        Undo              &lt;C-r&gt;        Redo
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Keybindings</a><ul>
-<li><a class="reference internal" href="#core-navigation">Core Navigation</a></li>
-<li><a class="reference internal" href="#python-development">Python Development</a></li>
-<li><a class="reference internal" href="#text-manipulation">Text Manipulation</a></li>
-<li><a class="reference internal" href="#standard-vim-bindings">Standard Vim Bindings</a><ul>
-<li><a class="reference internal" href="#navigation">Navigation</a></li>
-<li><a class="reference internal" href="#editing">Editing</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#customizing-keybindings">Customizing Keybindings</a></li>
-<li><a class="reference internal" href="#fzf-specific-bindings">FZF-specific Bindings</a></li>
-<li><a class="reference internal" href="#quick-reference-card">Quick Reference Card</a></li>
-<li><a class="reference internal" href="#tips">Tips</a></li>
+<li><a class="reference internal" href="#daily-essentials">Daily Essentials</a></li>
+<li><a class="reference internal" href="#code-navigation">Code Navigation</a></li>
+<li><a class="reference internal" href="#git-and-rebase">Git and Rebase</a></li>
+<li><a class="reference internal" href="#project-setup-commands">Project Setup Commands</a></li>
 </ul>
 </li>
 </ul>
