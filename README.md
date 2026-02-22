@@ -1,13 +1,14 @@
-# Neovim Configuration for Python Development
+# Neovim Configuration for Polyglot Development
 
-A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python development, featuring FZF integration, custom status line, and LSP support with Zuban (Python Language Server).
+A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first workflows with strong multi-language support (Go, Groovy, C/C++, SQL, TypeScript/JavaScript, Rust, Java), featuring FZF integration, custom status line, and built-in LSP.
 
 ## Features
 
 - **Minimal plugin setup** - Only essential plugins with careful curation
 - **FZF-powered fuzzy finding** - File search, buffer switching, git operations
 - **Python-first design** - Optimized for Python development workflows
-- **LSP support** - Uses Zuban (Rust-based Python LSP) and Ruff for linting
+- **Go support** - Uses gopls for Go language intelligence
+- **Polyglot LSP support** - Zuban/Ruff (Python), gopls (Go), groovyls, clangd, sqls, ts_ls, rust_analyzer, jdtls, and jsonls
 - **Code formatting** - Darker with isort for in-place Python code formatting
 - **Treesitter integration** - Enhanced syntax highlighting and code navigation
 - **Custom status line** - Lightweight, custom-built status bar with LSP info
@@ -162,6 +163,7 @@ All keybindings are organized with which-key for easy discovery. Press `<leader>
 
 - **Homebrew** (macOS) - For easy Neovim installation
 - **Cargo** (Rust package manager) - For building tools like `fd` and `eza`
+- **Language servers** - `gopls`, `groovy-language-server`, `clangd`, `sqls`, `typescript-language-server`, `rust-analyzer`, `jdtls`, `vscode-json-language-server`
 
 ## Troubleshooting
 

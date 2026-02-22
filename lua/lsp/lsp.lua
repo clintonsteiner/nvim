@@ -1,75 +1,85 @@
-local kind_icons = {
-    Text = "",
-    Method = "",
-    Function = "󰊕",
-    Constructor = "",
-    Field = "󰜢",
-    Variable = "𝒙",
-    Class = "",
-    Interface = "󰆧",
-    Module = "",
-    Property = "",
-    Unit = "",
-    Value = "",
-    Enum = "",
-    Keyword = "󰌋",
-    Snippet = "󰘍",
-    Color = "",
-    File = "",
-    Reference = "󰌹",
-    Folder = "",
-    EnumMember = "",
-    Constant = "",
-    Struct = "",
-    Event = "",
-    Operator = "",
-    TypeParameter = "",
-    Unknown = "?",
-}
-
 -- completion options
-vim.opt.completeopt = { 'menuone,noselect,popup' }
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect', 'popup' }
 vim.opt.pumheight = 20
 
 -- zuban lsp server
 local nvim_venv = vim.env.NVIM_VENV or (vim.env.HOME .. '/.virtualenvs/nvim')
-vim.lsp.config["zuban"] = {
-    cmd = { nvim_venv .. '/bin/zuban', 'server' },
-    root_dir = vim.lsp.util.root_pattern('.git', 'pyproject.toml', 'setup.py'),
+local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
+local lspconfig = require("lspconfig")
+local util = lspconfig.util
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+if has_cmp then
+    capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+end
+
+local function resolve_cmd(bin_name, extra_args, preferred_path)
+    local cmd_path = nil
+
+    if preferred_path and vim.fn.executable(preferred_path) == 1 then
+        cmd_path = preferred_path
+    else
+        local system_path = vim.fn.exepath(bin_name)
+        if system_path ~= "" then
+            cmd_path = system_path
+        else
+            local mason_path = mason_bin .. "/" .. bin_name
+            if vim.fn.executable(mason_path) == 1 then
+                cmd_path = mason_path
+            end
+        end
+    end
+
+    if not cmd_path then
+        return nil
+    end
+
+    local cmd = { cmd_path }
+    if extra_args then
+        vim.list_extend(cmd, extra_args)
+    end
+    return cmd
+end
+
+local function root_with_fallback(...)
+    local matcher = util.root_pattern(...)
+    return function(bufnr, on_dir)
+        local name = vim.api.nvim_buf_get_name(bufnr)
+        local root = matcher(name)
+        if root and root ~= "" then
+            on_dir(root)
+            return
+        end
+        on_dir(vim.fs.dirname(name))
+    end
+end
+
+local function register_server(name, config)
+    if not config.cmd then
+        return
+    end
+    vim.lsp.config[name] = config
+    vim.lsp.enable(name)
+end
+
+register_server("zuban", {
+    cmd = resolve_cmd("zuban", { "server" }, nvim_venv .. '/bin/zuban'),
+    root_dir = root_with_fallback('.git', 'pyproject.toml', 'setup.py'),
     filetypes = { "python" },
+    capabilities = capabilities,
     settings = {},
-    on_attach = function(client, bufnr)  -- luacheck: ignore 213
-        local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
-        client.server_capabilities.completionProvider.triggerCharacters = chars
+    on_attach = function(client, _bufnr)  -- luacheck: ignore 213
         client.server_capabilities.semanticTokensProvider = false  -- disable this as it seems to mess with treesitter highlighting at the moment
         client.server_capabilities.diagnosticProvider = false  -- will use ruff for this
-        -- client.capabilities.textDocument.publishDiagnostics = false  -- will use ruff for this
-        vim.lsp.completion.enable(true, client.id, bufnr, {
-            autotrigger = true,
-            convert = function(item)
-                local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or 'Unknown'
-                local kind_icon = kind_icons[kind]
-                local entry = {
-                    abbr = kind_icon .. ' ' .. item.label,
-                    kind = kind,
-                    -- menu = item.detail or '',  -- enable for big information popups
-                    menu = '',
-                    icase = 1,
-                    dup = 0,
-                    empty = 0,
-                }
-                return entry
-            end,
-        })
     end,
-}
-vim.lsp.enable("zuban")
+})
 
 -- ruff lsp server
-vim.lsp.config["ruff"] = {
-    cmd = { nvim_venv .. '/bin/ruff', 'server' },
-    root_dir = vim.lsp.util.root_pattern('.git', 'pyproject.toml', 'setup.py'),
+register_server("ruff", {
+    cmd = resolve_cmd("ruff", { "server" }, nvim_venv .. '/bin/ruff'),
+    root_dir = root_with_fallback('.git', 'pyproject.toml', 'setup.py'),
     filetypes = { "python" },
+    capabilities = capabilities,
     init_options = {
         settings = {
             lint = {
@@ -83,26 +93,78 @@ vim.lsp.config["ruff"] = {
     on_attach = function(client, _bufnr)  -- luacheck: ignore 213
         client.server_capabilities.hoverProvider = false
     end,
-}
-vim.lsp.enable("ruff")
+})
 
-local function keycode(keys)
-    return vim.api.nvim_replace_termcodes(keys, true, false, true)
-end
+-- gopls server
+register_server("gopls", {
+    cmd = resolve_cmd("gopls"),
+    root_dir = root_with_fallback('go.work', 'go.mod', '.git'),
+    filetypes = { "go", "gomod", "gowork", "gosum" },
+    capabilities = capabilities,
+    settings = {
+        gopls = {
+            gofumpt = true,
+            usePlaceholders = true,
+            staticcheck = true,
+        },
+    },
+})
 
-local pumMaps = {
-    ['<Tab>'] = '<C-n>',
-    ['<S-Tab>'] = '<C-p>',
-}
-for insertKmap, pumKmap in pairs(pumMaps) do
-    vim.keymap.set('i', insertKmap, function()
-        if vim.fn.pumvisible() == 1 then
-            vim.api.nvim_feedkeys(keycode(pumKmap), 'n', false)
-        else
-            vim.api.nvim_feedkeys(keycode(insertKmap), 'n', false)
-        end
-    end, { expr = true })
-end
+-- groovy lsp server
+register_server("groovyls", {
+    cmd = resolve_cmd("groovy-language-server"),
+    root_dir = root_with_fallback('gradlew', 'pom.xml', 'build.gradle', 'build.gradle.kts', '.git'),
+    filetypes = { "groovy" },
+    capabilities = capabilities,
+})
+
+-- clangd server for c/c++
+register_server("clangd", {
+    cmd = resolve_cmd("clangd"),
+    root_dir = root_with_fallback('compile_commands.json', 'compile_flags.txt', 'CMakeLists.txt', '.git'),
+    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+    capabilities = capabilities,
+})
+
+-- sql language server
+register_server("sqls", {
+    cmd = resolve_cmd("sqls"),
+    root_dir = root_with_fallback('.sqls.yml', '.git'),
+    filetypes = { "sql", "mysql", "plsql" },
+    capabilities = capabilities,
+})
+
+-- typescript/javascript language server (npm projects supported via package.json roots)
+register_server("ts_ls", {
+    cmd = resolve_cmd("typescript-language-server", { "--stdio" }),
+    root_dir = root_with_fallback('tsconfig.json', 'jsconfig.json', 'package.json', '.git'),
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    capabilities = capabilities,
+})
+
+-- rust language server
+register_server("rust_analyzer", {
+    cmd = resolve_cmd("rust-analyzer"),
+    root_dir = root_with_fallback('Cargo.toml', 'rust-project.json', '.git'),
+    filetypes = { "rust" },
+    capabilities = capabilities,
+})
+
+-- java language server
+register_server("jdtls", {
+    cmd = resolve_cmd("jdtls"),
+    root_dir = root_with_fallback('pom.xml', 'build.gradle', 'build.gradle.kts', '.git'),
+    filetypes = { "java" },
+    capabilities = capabilities,
+})
+
+-- json language server
+register_server("jsonls", {
+    cmd = resolve_cmd("vscode-json-language-server", { "--stdio" }),
+    root_dir = root_with_fallback('package.json', '.git'),
+    filetypes = { "json", "jsonc" },
+    capabilities = capabilities,
+})
 
 -- turn off diagnostics by default
 vim.diagnostic.config({

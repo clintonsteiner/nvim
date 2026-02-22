@@ -17,34 +17,86 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     {
         "neovim/nvim-lspconfig",
-        ft = "python",
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+            "williamboman/mason-lspconfig.nvim",
+        },
+        ft = {
+            "python",
+            "go",
+            "gomod",
+            "gowork",
+            "gosum",
+            "groovy",
+            "c",
+            "cpp",
+            "sql",
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+            "rust",
+            "java",
+            "json",
+            "jsonc",
+        },
         config = function()
             require("lsp")
         end,
     },
     {
+        "williamboman/mason.nvim",
+        cmd = "Mason",
+        opts = {},
+    },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "williamboman/mason.nvim",
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+        },
+        config = function()
+            require("plugin.mason")
+        end,
+    },
+    {
+        "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+        },
+        config = function()
+            require("plugin.cmp")
+        end,
+    },
+    {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
+        event = { "BufReadPost", "BufNewFile" },
         config = function()
             require("plugin.treesitter")
         end,
     },
     {
         "ibhagwan/fzf-lua",
+        cmd = "FzfLua",
         config = function()
             require("plugin.fzf-lua")
         end,
     },
     {
         "Shatur/neovim-ayu",
-        lazy = false,
-        priority = 1000,
+        event = "VeryLazy",
         config = function()
             require("plugin.ayu")
         end,
     },
     {
         "lewis6991/gitsigns.nvim",
+        event = { "BufReadPre", "BufNewFile" },
         config = function()
             require("plugin.gitsigns")
         end,
@@ -52,16 +104,18 @@ require("lazy").setup({
     {
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
+        event = { "BufReadPost", "BufNewFile" },
         config = function()
             require("plugin.indent_blankline")
         end,
     },
     {
         "kylechui/nvim-surround",
+        event = "VeryLazy",
         config = true,
     },
     {
-        "ggandor/leap.nvim",
+        "https://codeberg.org/andyg/leap.nvim",
         event = "VeryLazy",
         config = function()
             require("plugin.leap")

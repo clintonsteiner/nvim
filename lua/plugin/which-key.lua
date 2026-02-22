@@ -1,5 +1,4 @@
 local wk = require("which-key")
-local fzf = require("plugin.fzf-lua")  -- luacheck: ignore 211
 
 wk.add({
     { "<S-Tab>", ":bn<CR>", desc = "next buffer" },
