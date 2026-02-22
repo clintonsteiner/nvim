@@ -155,6 +155,12 @@ vim.api.nvim_create_autocmd("FileType", {
         "java",
         "json",
         "jsonc",
+        "yaml",
+        "sh",
+        "bash",
+        "zsh",
+        "toml",
+        "markdown",
     },
     callback = function(args)
         local bufnr = args.buf
@@ -183,6 +189,10 @@ vim.api.nvim_create_user_command("CheckDevEnv", function()
         { label = "rust-analyzer", cmd = "rust-analyzer" },
         { label = "jdtls", cmd = "jdtls" },
         { label = "vscode-json-language-server", cmd = "vscode-json-language-server" },
+        { label = "yaml-language-server", cmd = "yaml-language-server" },
+        { label = "bash-language-server", cmd = "bash-language-server" },
+        { label = "marksman", cmd = "marksman" },
+        { label = "taplo", cmd = "taplo" },
     }
 
     local lines = { "Development environment checks:" }
@@ -219,6 +229,12 @@ local ft_to_mason_packages = {
     java = { "jdtls" },
     json = { "jsonls" },
     jsonc = { "jsonls" },
+    yaml = { "yamlls" },
+    sh = { "bashls" },
+    bash = { "bashls" },
+    zsh = { "bashls" },
+    toml = { "taplo" },
+    markdown = { "marksman" },
 }
 
 local function ensure_mason_loaded()

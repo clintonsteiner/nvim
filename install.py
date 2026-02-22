@@ -357,7 +357,7 @@ class NvimSetup:
             print("✗ Neovim not found. Cannot install Treesitter.")
             return False
 
-        languages = "python go gomod gowork gosum groovy c cpp sql javascript typescript rust java json yaml lua comment vim vimdoc query"
+        languages = "python go gomod gowork gosum groovy c cpp sql javascript typescript rust java json yaml bash toml markdown markdown_inline lua comment vim vimdoc query"
         cmd = [str(nvim_path), "-c", f"TSInstall {languages}", "-c", "quit"]
 
         print(f"Installing Treesitter languages: {languages}")

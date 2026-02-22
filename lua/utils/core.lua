@@ -49,4 +49,16 @@ function M.toggle_inlay_hints()
     vim.lsp.inlay_hint.enable(not current, { bufnr = bufnr })
 end
 
+---Format current buffer with attached LSP server (manual invocation only)
+---@return nil
+function M.format_buffer()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+    if #clients == 0 then
+        vim.notify("No LSP client attached for formatting.", vim.log.levels.WARN)
+        return
+    end
+    vim.lsp.buf.format({ async = true, bufnr = bufnr })
+end
+
 return M

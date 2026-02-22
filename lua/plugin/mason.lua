@@ -15,6 +15,9 @@ mason_lspconfig.setup({
         "jdtls",
         "jsonls",
         "yamlls",
+        "bashls",
+        "marksman",
+        "taplo",
     },
     automatic_installation = true,
 })

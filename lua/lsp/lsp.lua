@@ -181,6 +181,30 @@ register_server("yamlls", {
     capabilities = capabilities,
 })
 
+-- shell language server
+register_server("bashls", {
+    cmd = resolve_cmd("bash-language-server", { "start" }),
+    root_dir = root_with_fallback('.git'),
+    filetypes = { "sh", "bash", "zsh" },
+    capabilities = capabilities,
+})
+
+-- markdown language server
+register_server("marksman", {
+    cmd = resolve_cmd("marksman", { "server" }),
+    root_dir = root_with_fallback('.git'),
+    filetypes = { "markdown" },
+    capabilities = capabilities,
+})
+
+-- toml language server
+register_server("taplo", {
+    cmd = resolve_cmd("taplo", { "lsp", "stdio" }),
+    root_dir = root_with_fallback('pyproject.toml', 'Cargo.toml', '.git'),
+    filetypes = { "toml" },
+    capabilities = capabilities,
+})
+
 -- turn off diagnostics by default
 vim.diagnostic.config({
     virtual_text = false,
