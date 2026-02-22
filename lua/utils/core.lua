@@ -41,4 +41,12 @@ function M.toggle_diagnostics()
     vim.diagnostic.config({virtual_text = not current_setting, signs = not current_setting, underline = not current_setting})
 end
 
+---Toggle LSP inlay hints for the current buffer
+---@return nil
+function M.toggle_inlay_hints()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local current = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+    vim.lsp.inlay_hint.enable(not current, { bufnr = bufnr })
+end
+
 return M

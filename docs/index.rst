@@ -1,8 +1,8 @@
-==========================================
-Neovim Python Configuration Documentation
-==========================================
+============================================
+Neovim Polyglot Configuration Documentation
+============================================
 
-A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python development, featuring FZF integration, custom status line, and LSP support with Zuban (Python Language Server).
+A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first workflows with polyglot support, featuring FZF integration, custom status line, lazy loading, and built-in LSP.
 
 .. toctree::
    :maxdepth: 2

@@ -1,6 +1,6 @@
 # Neovim Configuration for Polyglot Development
 
-A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first workflows with strong multi-language support (Go, Groovy, C/C++, SQL, TypeScript/JavaScript, Rust, Java), featuring FZF integration, custom status line, and built-in LSP.
+A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first workflows with strong multi-language support (Go, Groovy, C/C++, SQL, TypeScript/JavaScript, Rust, Java), featuring FZF integration, custom status line, lazy loading, built-in LSP, and Mason auto-install.
 
 ## Features
 
@@ -9,6 +9,7 @@ A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first 
 - **Python-first design** - Optimized for Python development workflows
 - **Go support** - Uses gopls for Go language intelligence
 - **Polyglot LSP support** - Zuban/Ruff (Python), gopls (Go), groovyls, clangd, sqls, ts_ls, rust_analyzer, jdtls, and jsonls
+- **Auto-install servers** - Mason installs missing non-Python LSP servers
 - **Code formatting** - Darker with isort for in-place Python code formatting
 - **Treesitter integration** - Enhanced syntax highlighting and code navigation
 - **Custom status line** - Lightweight, custom-built status bar with LSP info
@@ -40,6 +41,19 @@ The `install.py` script will guide you through:
 
 If you prefer manual setup, see [DEVELOPMENT.md](DEVELOPMENT.md) for step-by-step instructions.
 
+After first launch:
+
+```vim
+:Lazy sync
+:CheckDevEnv
+```
+
+If a filetype has no server installed yet:
+
+```vim
+:LspInstallMissing
+```
+
 ## Configuration Structure
 
 ```
@@ -60,7 +74,7 @@ nvim/
 │       └── treesitter.lua     # Treesitter helper functions
 ├── install.py                 # Automated setup script
 ├── pyproject.toml             # Python dependencies
-└── full_setup.txt             # Manual setup instructions
+└── lazy-lock.json             # Plugin lockfile
 ```
 
 ## Python Development Workflow
@@ -84,7 +98,7 @@ Generate coverage report for current module:
 
 ### Code Formatting
 
-Format Python file with darker (in-place):
+Format Python file with darker (manual only; no format-on-save):
 ```
 <leader>f
 ```
@@ -146,9 +160,10 @@ All keybindings are organized with which-key for easy discovery. Press `<leader>
 
 | Key | Action |
 |-----|--------|
-| `<leader>w` | Toggle text wrap |
-| `<leader>d` | Toggle diagnostics |
-| `<leader>ss` | Save session |
+| `<leader>tw` | Toggle text wrap |
+| `<leader>td` | Toggle diagnostics |
+| `<leader>th` | Toggle inlay hints |
+| `<leader>s` | Save session |
 
 ## Requirements
 
@@ -179,7 +194,7 @@ All keybindings are organized with which-key for easy discovery. Press `<leader>
    ~/.virtualenvs/nvim/bin/python -m pip list | grep zuban
    ```
 
-3. Run `:checkhealth` in Neovim to see LSP status
+3. Run `:LspInfo` and `:CheckDevEnv` in Neovim to see LSP status
 
 ### Issue: FZF not working
 
@@ -199,7 +214,7 @@ All keybindings are organized with which-key for easy discovery. Press `<leader>
 
 Run this in Neovim:
 ```vim
-:TSInstall python lua comment vim vimdoc c sql query
+:TSInstall python go gomod gowork gosum groovy c cpp sql javascript typescript rust java json lua comment vim vimdoc query
 ```
 
 Or use the setup script option when running `install.py`.
@@ -219,6 +234,15 @@ Edit `lua/plugin/which-key.lua` to add new keybindings. The which-key integratio
 ### Adding LSP Servers
 
 Edit `lua/lsp/lsp.lua` to add additional language servers. The configuration uses the built-in Neovim LSP client.
+
+### Installing Missing LSP Servers
+
+Use:
+```vim
+:LspInstallMissing
+```
+
+This installs Mason-managed LSP packages for the current buffer filetype.
 
 ### Configuring Plugins
 

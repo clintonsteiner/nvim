@@ -201,3 +201,91 @@ vim.api.nvim_create_user_command("CheckDevEnv", function()
 end, {
     desc = "Check required language-server executables",
 })
+
+local ft_to_mason_packages = {
+    go = { "gopls" },
+    gomod = { "gopls" },
+    gowork = { "gopls" },
+    gosum = { "gopls" },
+    groovy = { "groovyls" },
+    c = { "clangd" },
+    cpp = { "clangd" },
+    sql = { "sqls" },
+    javascript = { "ts_ls" },
+    javascriptreact = { "ts_ls" },
+    typescript = { "ts_ls" },
+    typescriptreact = { "ts_ls" },
+    rust = { "rust_analyzer" },
+    java = { "jdtls" },
+    json = { "jsonls" },
+    jsonc = { "jsonls" },
+}
+
+local function ensure_mason_loaded()
+    local ok, lazy = pcall(require, "lazy")
+    if not ok then
+        return false
+    end
+    lazy.load({ plugins = { "mason.nvim", "mason-lspconfig.nvim", "mason-tool-installer.nvim" } })
+    return true
+end
+
+vim.api.nvim_create_user_command("LspInstallMissing", function()
+    local ft = vim.bo.filetype
+    local packages = ft_to_mason_packages[ft]
+
+    if not packages or #packages == 0 then
+        vim.notify("No Mason-managed LSP package configured for filetype '" .. ft .. "'.", vim.log.levels.INFO)
+        return
+    end
+
+    if not ensure_mason_loaded() then
+        vim.notify("Could not load lazy.nvim to initialize Mason.", vim.log.levels.ERROR)
+        return
+    end
+
+    local ok_registry, registry = pcall(require, "mason-registry")
+    if not ok_registry then
+        vim.notify("Mason registry unavailable. Run :Lazy sync and try again.", vim.log.levels.ERROR)
+        return
+    end
+
+    local function install_packages()
+        local installed = {}
+        local installing = {}
+        local unavailable = {}
+
+        for _, name in ipairs(packages) do
+            local ok_pkg, pkg = pcall(registry.get_package, name)
+            if not ok_pkg then
+                table.insert(unavailable, name)
+            elseif pkg:is_installed() then
+                table.insert(installed, name)
+            else
+                pkg:install()
+                table.insert(installing, name)
+            end
+        end
+
+        local lines = { "LSP install check for '" .. ft .. "':" }
+        if #installed > 0 then
+            table.insert(lines, "already installed: " .. table.concat(installed, ", "))
+        end
+        if #installing > 0 then
+            table.insert(lines, "installing: " .. table.concat(installing, ", "))
+        end
+        if #unavailable > 0 then
+            table.insert(lines, "not found in Mason registry: " .. table.concat(unavailable, ", "))
+        end
+
+        local level = #unavailable > 0 and vim.log.levels.WARN or vim.log.levels.INFO
+        vim.notify(table.concat(lines, "\n"), level, { title = "LspInstallMissing" })
+    end
+
+    local ok_refresh = pcall(registry.refresh, install_packages)
+    if not ok_refresh then
+        install_packages()
+    end
+end, {
+    desc = "Install missing Mason LSP packages for current filetype",
+})

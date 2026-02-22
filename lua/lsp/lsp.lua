@@ -62,6 +62,13 @@ local function register_server(name, config)
     vim.lsp.enable(name)
 end
 
+local function get_java_workspace()
+    local project = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+    local workspace = vim.fn.stdpath("data") .. "/jdtls-workspace/" .. project
+    vim.fn.mkdir(workspace, "p")
+    return workspace
+end
+
 register_server("zuban", {
     cmd = resolve_cmd("zuban", { "server" }, nvim_venv .. '/bin/zuban'),
     root_dir = root_with_fallback('.git', 'pyproject.toml', 'setup.py'),
@@ -152,7 +159,7 @@ register_server("rust_analyzer", {
 
 -- java language server
 register_server("jdtls", {
-    cmd = resolve_cmd("jdtls"),
+    cmd = resolve_cmd("jdtls", { "-data", get_java_workspace() }),
     root_dir = root_with_fallback('pom.xml', 'build.gradle', 'build.gradle.kts', '.git'),
     filetypes = { "java" },
     capabilities = capabilities,

@@ -79,6 +79,7 @@ wk.add({
 
     { "<leader>t", group = "toggles" },
     { "<leader>td", "<cmd>lua require('utils.core').toggle_diagnostics()<CR>", desc = "diagnostics" },
+    { "<leader>th", "<cmd>lua require('utils.core').toggle_inlay_hints()<CR>", desc = "inlay hints" },
     { "<leader>ti", ":IBLToggle<CR>", desc = "indents" },
     { "<leader>tw", "<cmd>lua require('utils.core').toggle_text_wrap()<CR>", desc = "text wrap" },
 
