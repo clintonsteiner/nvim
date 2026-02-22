@@ -83,24 +83,24 @@ nvim/
 
 Execute the current test file with pytest:
 ```
-<leader>t
+<leader>py
 ```
 
 Run a specific test function:
 ```
-<leader>T
+<leader>pz
 ```
 
 Generate coverage report for current module:
 ```
-<leader>c
+<leader>pc
 ```
 
 ### Code Formatting
 
 Format Python file with darker (manual only; no format-on-save):
 ```
-<leader>f
+<leader>lf
 ```
 
 Darker preserves line length (140 chars) and uses isort for import sorting.
@@ -151,10 +151,10 @@ All keybindings are organized with which-key for easy discovery. Press `<leader>
 
 | Key | Action |
 |-----|--------|
-| `<leader>t` | Run pytest on current file |
-| `<leader>T` | Run specific test |
-| `<leader>c` | Generate coverage report |
-| `<leader>f` | Format file with darker |
+| `<leader>py` | Run pytest on current file |
+| `<leader>pz` | Run specific test under cursor |
+| `<leader>pc` | Generate coverage report |
+| `<leader>lf` | Format file with darker |
 
 ### Text Manipulation
 

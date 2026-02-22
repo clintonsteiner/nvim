@@ -51,10 +51,15 @@ wk.add({
     { "<leader>ld", "<cmd>lua require('fzf-lua').lsp_definitions({jump1 = true})<CR>", desc = "definition" },
     { "<leader>lf", "<cmd>lua require('utils.python').darker()<CR>", desc = "apply darker" },
     { "<leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>", desc = "hover" },
+    { "<leader>li", "<cmd>LspInfo<CR>", desc = "info" },
+    { "<leader>lI", "<cmd>LspInstallMissing<CR>", desc = "install missing" },
     { "<leader>ll", "<cmd>lua require('fzf-lua').lsp_document_diagnostics()<CR>", desc = "list diagnostics" },
+    { "<leader>lm", "<cmd>Mason<CR>", desc = "mason" },
     { "<leader>ln", "<cmd>lua vim.lsp.buf.rename()<CR>", desc = "rename" },
     { "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references()<CR>", desc = "references" },
+    { "<leader>lR", "<cmd>LspRestart<CR>", desc = "restart" },
     { "<leader>ls", "<cmd>lua vim.diagnostic.open_float()<CR>", desc = "show line diagnostics" },
+    { "<leader>lv", "<cmd>CheckDevEnv<CR>", desc = "verify env" },
 
     { "<leader>o", group = "open" },
     { "<leader>of", "<cmd>lua require('fzf-lua').files({cwd_prompt = false, prompt = 'Files> ', git_icons = false})<CR>", desc = "files" },
@@ -82,6 +87,10 @@ wk.add({
     { "<leader>th", "<cmd>lua require('utils.core').toggle_inlay_hints()<CR>", desc = "inlay hints" },
     { "<leader>ti", ":IBLToggle<CR>", desc = "indents" },
     { "<leader>tw", "<cmd>lua require('utils.core').toggle_text_wrap()<CR>", desc = "text wrap" },
+
+    { "<leader>x", group = "system" },
+    { "<leader>xl", "<cmd>Lazy<CR>", desc = "lazy" },
+    { "<leader>xh", "<cmd>checkhealth<CR>", desc = "health" },
 
     {
         mode = { "v" },
