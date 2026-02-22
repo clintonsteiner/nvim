@@ -16,6 +16,14 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    group = group,
+    pattern = "Jenkinsfile*",
+    callback = function()
+        vim.bo.filetype = "groovy"
+    end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
     group = group,
     pattern = { "lua", "python", "sh", "bash", "zsh", "c", "cpp", "java", "rust", "sql", "groovy" },

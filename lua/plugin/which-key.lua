@@ -54,6 +54,7 @@ wk.add({
     { "<leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>", desc = "hover" },
     { "<leader>li", "<cmd>LspInfo<CR>", desc = "info" },
     { "<leader>lI", "<cmd>LspInstallMissing<CR>", desc = "install missing" },
+    { "<leader>lj", "<cmd>lua require('utils.core').format_jenkinsfile()<CR>", desc = "format Jenkinsfile" },
     { "<leader>ll", "<cmd>lua require('fzf-lua').lsp_document_diagnostics()<CR>", desc = "list diagnostics" },
     { "<leader>lm", "<cmd>Mason<CR>", desc = "mason" },
     { "<leader>ln", "<cmd>lua vim.lsp.buf.rename()<CR>", desc = "rename" },

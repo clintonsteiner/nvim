@@ -61,4 +61,19 @@ function M.format_buffer()
     vim.lsp.buf.format({ async = true, bufnr = bufnr })
 end
 
+---Format Jenkinsfile* buffers as Groovy via LSP
+---@return nil
+function M.format_jenkinsfile()
+    local name = vim.fn.expand("%:t")
+    if not name:match("^Jenkinsfile") then
+        vim.notify("Current file is not Jenkinsfile*.", vim.log.levels.INFO)
+        return
+    end
+
+    if vim.bo.filetype ~= "groovy" then
+        vim.bo.filetype = "groovy"
+    end
+    M.format_buffer()
+end
+
 return M
