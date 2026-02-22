@@ -318,7 +318,7 @@ Keybinding Issues
 
    .. code-block:: vim
 
-       :PlugInstall
+       :Lazy sync
 
 3. Verify which-key is required in ``init.lua``
 4. Restart Neovim
@@ -638,7 +638,7 @@ Most common quick fixes:
 
 1. **Restart Neovim** - Solves 30% of issues
 2. **Run ``:checkhealth``** - Diagnoses most issues
-3. **Reinstall plugins** - ``:PlugClean`` then ``:PlugInstall``
+3. **Reinstall plugins** - ``:Lazy clean`` then ``:Lazy sync``
 4. **Check virtual environment** - Python issues often here
 5. **View error messages** - ``:messages`` shows what's wrong
 6. **Check installation** - Run ``python3 install.py`` again

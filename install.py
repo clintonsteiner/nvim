@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.9"
+# dependencies = []
+# ///
 """
 Automated Neovim setup script.
 Sets up Neovim v0.11.4 from scratch with all dependencies.
@@ -19,15 +23,26 @@ class NvimSetup:
 
     def __init__(self):
         self.neovim_version = "0.11.4"
+        self.nerd_font_name = "JetBrainsMono"
+        self.nerd_font_cask_slug = "jetbrains-mono"
         self.home = Path.home()
         self.neovim_dir = self.home / "apps" / "neovim"
         self.venv_dir = self.home / ".virtualenvs" / "nvim"
         self.dotfiles_dir = self.home / "dotfiles"
         self.nvim_config_dir = self.home / ".config" / "nvim"
         self.local_bin_dir = self.home / ".local" / "bin"
+        self.user_fonts_dir = self.home / ".local" / "share" / "fonts"
         self.script_dir = Path(__file__).parent
+        self.config_source_dir: Optional[Path] = None
         self.pyproject_path = self.script_dir / "pyproject.toml"
         self.dependencies = self._load_dependencies()
+
+    def _remove_path(self, path: Path) -> None:
+        """Remove a file, symlink, or directory."""
+        if path.is_symlink() or path.is_file():
+            path.unlink()
+        elif path.is_dir():
+            shutil.rmtree(path)
 
     def _load_dependencies(self) -> List[str]:
         """Load dependencies from pyproject.toml."""
@@ -87,6 +102,7 @@ class NvimSetup:
             self.dotfiles_dir,
             self.nvim_config_dir,
             self.local_bin_dir,
+            self.user_fonts_dir,
         ]
 
         for directory in dirs:
@@ -129,14 +145,13 @@ class NvimSetup:
         """Download Neovim macOS binary."""
         self.neovim_dir.mkdir(parents=True, exist_ok=True)
 
-        nvim_dir = self.neovim_dir / "nvim.app"
-        if nvim_dir.exists():
-            if not self.confirm("Neovim.app already exists. Overwrite?"):
+        arch = "arm64" if platform.machine() in ("arm64", "aarch64") else "x86_64"
+        extracted_dir = self.neovim_dir / f"nvim-macos-{arch}"
+        if extracted_dir.exists():
+            if not self.confirm(f"{extracted_dir} already exists. Overwrite?"):
                 return True
-            shutil.rmtree(nvim_dir)
+            self._remove_path(extracted_dir)
 
-        # Determine architecture
-        arch = "arm64" if platform.machine() == "arm64" else "x86_64"
         url = f"https://github.com/neovim/neovim/releases/download/v{self.neovim_version}/nvim-macos-{arch}.tar.gz"
 
         tar_path = self.neovim_dir / "nvim.tar.gz"
@@ -150,8 +165,12 @@ class NvimSetup:
         if not self.run_command(cmd, "extract Neovim"):
             return False
 
+        if not (extracted_dir / "bin" / "nvim").exists():
+            print(f"✗ Could not find extracted Neovim binary at {extracted_dir / 'bin' / 'nvim'}")
+            return False
+
         tar_path.unlink()
-        print(f"✓ Downloaded and extracted Neovim")
+        print(f"✓ Downloaded and extracted Neovim to {extracted_dir}")
         return True
 
     def _install_neovim_linux(self) -> bool:
@@ -163,7 +182,16 @@ class NvimSetup:
                 return True
             nvim_path.unlink()
 
-        url = f"https://github.com/neovim/neovim/releases/download/v{self.neovim_version}/nvim-linux-x86_64.appimage"
+        machine = platform.machine().lower()
+        if machine in ("x86_64", "amd64"):
+            arch = "x86_64"
+        elif machine in ("aarch64", "arm64"):
+            arch = "arm64"
+        else:
+            print(f"✗ Unsupported Linux architecture: {platform.machine()}")
+            return False
+
+        url = f"https://github.com/neovim/neovim/releases/download/v{self.neovim_version}/nvim-linux-{arch}.appimage"
         cmd = ["curl", "-L", "-o", str(nvim_path), url]
 
         if not self.run_command(cmd, "download Neovim"):
@@ -186,7 +214,7 @@ class NvimSetup:
         result = subprocess.run(["which", "uv"], capture_output=True)
         if result.returncode != 0:
             print("✗ uv not found. Installing uv...")
-            if not self.run_command(["pip", "install", "uv"], "install uv"):
+            if not self.run_command([sys.executable, "-m", "pip", "install", "--user", "uv"], "install uv"):
                 return False
 
         if self.venv_dir.exists():
@@ -202,18 +230,32 @@ class NvimSetup:
         print(f"✓ Created virtual environment at {self.venv_dir}")
         return True
 
-    def clone_config(self) -> bool:
-        """Clone Neovim config repository."""
-        if not self.confirm("Clone Neovim configuration?"):
+    def prepare_config_source(self) -> bool:
+        """Choose configuration source (current checkout or clone)."""
+        if self.config_source_dir and self.config_source_dir.exists():
+            return True
+
+        local_repo_has_config = (
+            (self.script_dir / "init.lua").exists() and
+            (self.script_dir / "lua").is_dir()
+        )
+
+        if local_repo_has_config and self.confirm("Use current repository as Neovim configuration source?"):
+            self.config_source_dir = self.script_dir
+            print(f"✓ Using current repository: {self.config_source_dir}")
+            return True
+
+        if not self.confirm("Clone Neovim configuration to ~/dotfiles/nvim?"):
             return False
 
         nvim_config_path = self.dotfiles_dir / "nvim"
 
         if nvim_config_path.exists():
-            if not self.confirm("Configuration already exists. Use existing?"):
-                shutil.rmtree(nvim_config_path)
-            else:
+            if self.confirm("Configuration already exists in ~/dotfiles/nvim. Use existing?"):
+                self.config_source_dir = nvim_config_path
+                print(f"✓ Using existing configuration: {nvim_config_path}")
                 return True
+            self._remove_path(nvim_config_path)
 
         cmd = [
             "git", "clone",
@@ -224,6 +266,7 @@ class NvimSetup:
         if not self.run_command(cmd, "clone configuration"):
             return False
 
+        self.config_source_dir = nvim_config_path
         print(f"✓ Cloned configuration to {nvim_config_path}")
         return True
 
@@ -250,12 +293,86 @@ class NvimSetup:
         print(f"✓ Installed all packages")
         return True
 
+    def install_nerd_font(self) -> bool:
+        """Install JetBrains Mono Nerd Font."""
+        if not self.confirm(f"Install {self.nerd_font_name} Nerd Font?"):
+            return False
+
+        system = platform.system()
+        if system == "Darwin":
+            return self._install_nerd_font_macos()
+        if system == "Linux":
+            return self._install_nerd_font_linux()
+
+        print(f"✗ Unsupported system for Nerd Font install: {system}")
+        return False
+
+    def _install_nerd_font_macos(self) -> bool:
+        """Install Nerd Font on macOS."""
+        brew = subprocess.run(["which", "brew"], capture_output=True)
+        if brew.returncode == 0:
+            cask_name = f"font-{self.nerd_font_cask_slug}-nerd-font"
+            if not self.run_command(["brew", "tap", "homebrew/cask-fonts"], "tap Homebrew cask fonts"):
+                return False
+            if not self.run_command(["brew", "install", "--cask", cask_name], "install Nerd Font with Homebrew"):
+                return False
+            print(f"✓ Installed {self.nerd_font_name} Nerd Font with Homebrew")
+            return True
+
+        print("⚠ Homebrew not found. Downloading Nerd Font directly...")
+        target_dir = self.home / "Library" / "Fonts"
+        return self._install_nerd_font_from_release(target_dir)
+
+    def _install_nerd_font_linux(self) -> bool:
+        """Install Nerd Font on Linux."""
+        target_dir = self.user_fonts_dir / "NerdFonts" / self.nerd_font_name
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        if not self._install_nerd_font_from_release(target_dir):
+            return False
+
+        fc_cache = subprocess.run(["which", "fc-cache"], capture_output=True)
+        if fc_cache.returncode == 0:
+            self.run_command(["fc-cache", "-fv"], "refresh font cache", check=False)
+        else:
+            print("⚠ fc-cache not found. Restart your terminal session after setting the new font.")
+
+        return True
+
+    def _install_nerd_font_from_release(self, target_dir: Path) -> bool:
+        """Install Nerd Font by downloading the latest release zip."""
+        unzip = subprocess.run(["which", "unzip"], capture_output=True)
+        if unzip.returncode != 0:
+            print("✗ unzip not found. Please install unzip first.")
+            return False
+
+        zip_path = self.home / ".cache" / "nvim-setup" / f"{self.nerd_font_name}.zip"
+        zip_path.parent.mkdir(parents=True, exist_ok=True)
+        download_url = (
+            "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/"
+            f"{self.nerd_font_name}.zip"
+        )
+
+        if not self.run_command(["curl", "-fL", "-o", str(zip_path), download_url], "download Nerd Font"):
+            return False
+
+        target_dir.mkdir(parents=True, exist_ok=True)
+        if not self.run_command(["unzip", "-o", str(zip_path), "-d", str(target_dir)], "extract Nerd Font"):
+            return False
+
+        print(f"✓ Installed {self.nerd_font_name} Nerd Font in {target_dir}")
+        return True
+
     def create_symlinks(self) -> bool:
         """Create symlinks to Neovim configuration."""
         if not self.confirm("Create symlinks to configuration?"):
             return False
 
-        nvim_config_path = self.dotfiles_dir / "nvim"
+        if not self.config_source_dir:
+            if not self.prepare_config_source():
+                return False
+
+        nvim_config_path = self.config_source_dir
 
         symlinks = [
             (nvim_config_path / "init.lua", self.nvim_config_dir / "init.lua"),
@@ -267,12 +384,25 @@ class NvimSetup:
                 print(f"✗ Source not found: {source}")
                 return False
 
+            source_resolved = source.resolve()
+            target_resolved = target.resolve(strict=False)
+            if source_resolved == target_resolved:
+                print(f"✓ Source and target are the same path, skipping: {target}")
+                continue
+
             if target.exists() or target.is_symlink():
-                target.unlink()
+                if target.is_symlink():
+                    try:
+                        if target.resolve(strict=False) == source_resolved:
+                            print(f"✓ Symlink already correct: {target}")
+                            continue
+                    except RuntimeError:
+                        pass
+                self._remove_path(target)
 
             try:
-                target.symlink_to(source)
-                print(f"✓ Created symlink: {target} -> {source}")
+                target.symlink_to(source_resolved)
+                print(f"✓ Created symlink: {target} -> {source_resolved}")
             except Exception as e:
                 print(f"✗ Failed to create symlink: {e}")
                 return False
@@ -297,14 +427,17 @@ class NvimSetup:
 
         if system == "Darwin":
             # macOS binary installation
-            nvim_bin = self.neovim_dir / "nvim.app" / "bin" / "nvim"
+            nvim_bin = self._get_nvim_executable()
+            if not nvim_bin:
+                print("✗ Could not find Neovim binary. Install Neovim first.")
+                return False
             script_content = f"""#!/usr/bin/env bash
-{nvim_bin} "$@"
+"{nvim_bin}" "$@"
 """
         else:
             # Linux AppImage
             script_content = f"""#!/usr/bin/env bash
-{self.neovim_dir}/nvim.appimage "$@"
+"{self.neovim_dir}/nvim.appimage" "$@"
 """
 
         try:
@@ -336,7 +469,12 @@ class NvimSetup:
                 return result.stdout.strip()
 
             # Try binary installation
-            nvim_bin = self.neovim_dir / "nvim.app" / "bin" / "nvim"
+            machine = platform.machine().lower()
+            if machine in ("arm64", "aarch64"):
+                arch = "arm64"
+            else:
+                arch = "x86_64"
+            nvim_bin = self.neovim_dir / f"nvim-macos-{arch}" / "bin" / "nvim"
             if nvim_bin.exists():
                 return str(nvim_bin)
         elif system == "Linux":
@@ -371,11 +509,9 @@ class NvimSetup:
         # Check if cargo is installed
         result = subprocess.run(["which", "cargo"], capture_output=True)
         if result.returncode != 0:
-            if not self.confirm("Cargo not found. Install it first (sudo apt-get install cargo)?"):
-                return False
-            if not self.run_command(["sudo", "apt-get", "install", "-y", "cargo"],
-                                   "install cargo"):
-                return False
+            print("⚠ Cargo not found. Skipping Rust tools install.")
+            print("Install Rust toolchain from https://rustup.rs and run install.py again.")
+            return False
 
         tools = ["eza", "fd-find"]
 
@@ -383,10 +519,9 @@ class NvimSetup:
             if not self.run_command(["cargo", "install", tool], f"install {tool}"):
                 print(f"⚠ Failed to install {tool}, continuing...")
 
-        # Install ctags separately (not a cargo tool)
-        if not self.run_command(["sudo", "apt-get", "install", "-y", "ctags"],
-                               "install ctags"):
-            print("⚠ Failed to install ctags, continuing...")
+        ctags_found = subprocess.run(["which", "ctags"], capture_output=True)
+        if ctags_found.returncode != 0:
+            print("⚠ ctags not found; install it with your package manager if needed.")
 
         print("✓ Installed Rust tools")
         return True
@@ -400,8 +535,9 @@ class NvimSetup:
             ("Creating directories", self.create_directories),
             ("Downloading Neovim", self.download_neovim),
             ("Setting up virtual environment", self.setup_venv),
-            ("Cloning configuration", self.clone_config),
+            ("Preparing configuration source", self.prepare_config_source),
             ("Installing Python packages", self.install_python_packages),
+            ("Installing Nerd Font", self.install_nerd_font),
             ("Creating symlinks", self.create_symlinks),
             ("Creating launch script", self.create_launch_script),
             ("Installing Treesitter", self.install_treesitter),
@@ -432,8 +568,8 @@ class NvimSetup:
         if self.confirm("\nLaunch Neovim now to install plugins?"):
             nvim_path = self._get_nvim_executable()
             if nvim_path:
-                # Run nvim with :PlugInstall
-                cmd = [str(nvim_path), "-c", "PlugInstall", "-c", "quit"]
+                # Run nvim with :Lazy sync
+                cmd = [str(nvim_path), "-c", "Lazy sync", "-c", "quitall"]
                 self.run_command(cmd, "install plugins")
             else:
                 print("⚠ Could not find Neovim executable")

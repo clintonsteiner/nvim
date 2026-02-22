@@ -14,6 +14,9 @@ A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first 
 - **Treesitter integration** - Enhanced syntax highlighting and code navigation
 - **Custom status line** - Lightweight, custom-built status bar with LSP info
 - **Smart keybindings** - Organized with which-key for discoverability
+- **Project file marks** - Harpoon workflow for instant file jumps
+- **Outline + breadcrumbs** - Aerial symbols + winbar context via navic
+- **Rebase toolkit** - Conflict helpers and rebase-on-master keymaps
 
 ## Quick Start
 
@@ -33,9 +36,10 @@ The `install.py` script will guide you through:
 3. Setting up a Python virtual environment
 4. Cloning this configuration
 5. Installing Python dependencies
-6. Creating symlinks to the configuration
-7. Installing Treesitter language support
-8. Optionally installing Rust tools (eza, fd, ctags)
+6. Installing JetBrains Mono Nerd Font
+7. Creating symlinks to the configuration
+8. Installing Treesitter language support
+9. Optionally installing Rust tools (eza, fd, ctags)
 
 ### Manual Installation
 
@@ -122,6 +126,21 @@ Code navigation and completion are provided by Zuban (Python LSP):
 - Find references: `gr`
 - Rename symbol: `<leader>rn`
 - Code completion: `<C-x><C-o>` or configured with nvim-cmp
+
+## Suggested Daily Workflow
+
+1. Mark your active files with Harpoon:
+   - `<leader>ja` add file, `<leader>jj` menu, `<leader>j1..j4` jump
+2. Keep structure visible:
+   - `<leader>lo` toggle outline (Aerial), winbar shows breadcrumb context
+3. Validate often:
+   - `<leader>mn` nearest test, `<leader>mt` tests, `<leader>ml` lint, `<leader>mb` build
+   - quickfix auto-opens on failures and closes on success
+4. Rebase branch on top of `master`:
+   - `<leader>gF` fetch upstream (forks), `<leader>gRm` start, `<leader>gRl` list conflicts, `<leader>gRc` continue
+
+Full workflow docs are in `docs/workflows.rst`.
+Use that page as the canonical "how to drive this config" guide.
 
 ## Python Dependencies
 
@@ -240,9 +259,11 @@ Or use the setup script option when running `install.py`.
 
 ### Issue: Icons not displaying correctly
 
-Install a Nerd Font (e.g., IntelOneMono Nerd Font):
+Install a Nerd Font (e.g., JetBrains Mono Nerd Font):
 - Download from: https://github.com/ryanoasis/nerd-fonts
 - Set it as your terminal font in your terminal application settings
+
+You can also install JetBrains Mono Nerd Font directly through `python3 install.py`.
 
 ## Customization
 

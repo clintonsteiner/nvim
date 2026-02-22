@@ -17,6 +17,7 @@ A minimal, pragmatic Neovim (v0.11.4+) configuration optimized for Python-first 
    :caption: Usage Guide
 
    keybindings
+   workflows
    python_workflow
    lsp_features
    fzf_guide
