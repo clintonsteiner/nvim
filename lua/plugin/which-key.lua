@@ -40,6 +40,13 @@ wk.add({
     { "<leader>gt", "<cmd>lua require('fzf-lua').git_stash()<CR>", desc = "stash list" },
     { "<leader>gu", "<cmd>Gitsigns reset_hunk<CR>", desc = "undo hunk" },
 
+    { "<leader>G", group = "go" },
+    { "<leader>Gf", "<cmd>lua require('utils.core').format_buffer()<CR>", desc = "format buffer" },
+    { "<leader>GF", "<cmd>lua require('utils.go').format_all()<CR>", desc = "go fmt ./..." },
+    { "<leader>Gr", "<cmd>lua require('utils.go').run_interactive()<CR>", desc = "run interactive" },
+    { "<leader>Gt", "<cmd>lua require('utils.go').test_all()<CR>", desc = "test ./..." },
+    { "<leader>GT", "<cmd>lua require('utils.go').test_interactive()<CR>", desc = "test interactive" },
+
     { "<leader>i", group = "insert text" },
     { "<leader>ib", ":lua require('utils.python').abbrev('sbreak')<CR>", desc = "break" },
     { "<leader>il", ":lua require('utils.python').abbrev('lbreak')<CR>", desc = "long break" },

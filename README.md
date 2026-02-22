@@ -105,6 +105,16 @@ Format Python file with darker (manual only; no format-on-save):
 
 Darker preserves line length (140 chars) and uses isort for import sorting.
 
+Format any file using attached LSP formatter (manual only):
+```
+<leader>lF
+```
+
+Format `Jenkinsfile*` as Groovy (manual only):
+```
+<leader>lj
+```
+
 ### LSP Features
 
 Code navigation and completion are provided by Zuban (Python LSP):
@@ -179,6 +189,15 @@ All keybindings are organized with which-key for easy discovery. Press `<leader>
 - **Homebrew** (macOS) - For easy Neovim installation
 - **Cargo** (Rust package manager) - For building tools like `fd` and `eza`
 - **Language servers** - `gopls`, `groovy-language-server`, `clangd`, `sqls`, `typescript-language-server`, `rust-analyzer`, `jdtls`, `vscode-json-language-server`
+
+### Common File Support
+
+LSP/linting support is configured for commonly used filetypes:
+- **YAML** via `yamlls`
+- **Shell** (`sh`, `bash`, `zsh`) via `bashls`
+- **Markdown** via `marksman`
+- **TOML** via `taplo`
+- **Jenkinsfile*** as Groovy
 
 ## Troubleshooting
 
