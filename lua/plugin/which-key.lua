@@ -1,5 +1,12 @@
 local wk = require("which-key")
 
+wk.setup({
+    delay = 0,
+    triggers = {
+        { "<leader>", mode = { "n" } },
+    },
+})
+
 wk.add({
     { "<S-Tab>", ":bn<CR>", desc = "next buffer" },
     { "<Tab>", "<C-^>", desc = "last buffer" },
@@ -46,6 +53,13 @@ wk.add({
     { "<leader>Gr", "<cmd>lua require('utils.go').run_interactive()<CR>", desc = "run interactive" },
     { "<leader>Gt", "<cmd>lua require('utils.go').test_all()<CR>", desc = "test ./..." },
     { "<leader>GT", "<cmd>lua require('utils.go').test_interactive()<CR>", desc = "test interactive" },
+
+    { "<leader>m", group = "go run" },
+    { "<leader>mf", "<cmd>lua require('utils.core').format_buffer()<CR>", desc = "format buffer" },
+    { "<leader>mF", "<cmd>lua require('utils.go').format_all()<CR>", desc = "go fmt ./..." },
+    { "<leader>mr", "<cmd>lua require('utils.go').run_interactive()<CR>", desc = "run interactive" },
+    { "<leader>mt", "<cmd>lua require('utils.go').test_all()<CR>", desc = "test ./..." },
+    { "<leader>mT", "<cmd>lua require('utils.go').test_interactive()<CR>", desc = "test interactive" },
 
     { "<leader>i", group = "insert text" },
     { "<leader>ib", ":lua require('utils.python').abbrev('sbreak')<CR>", desc = "break" },
