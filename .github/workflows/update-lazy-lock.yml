@@ -31,7 +31,7 @@ jobs:
           nvim --headless -u init.lua "+Lazy! update" "+qa"
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "chore: update lazy-lock.json"
           title: "chore: update lazy-lock.json"
