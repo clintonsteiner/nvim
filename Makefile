@@ -1,7 +1,10 @@
-.PHONY: bootstrap try try-keep docs test check
+.PHONY: bootstrap bootstrap-auto try try-keep docs test check
 
 bootstrap:
 	python3 install.py
+
+bootstrap-auto:
+	yes y | python3 install.py
 
 try:
 	./scripts/try.sh

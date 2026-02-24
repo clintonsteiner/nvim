@@ -38,6 +38,12 @@ Run the interactive installer:
 make bootstrap
 ```
 
+Run a fully automatic installer flow (accepts all prompts):
+
+```bash
+make bootstrap-auto
+```
+
 ### Automated Installation
 
 The easiest way to set up this configuration:

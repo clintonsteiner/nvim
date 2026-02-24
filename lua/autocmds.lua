@@ -254,23 +254,31 @@ local function ensure_mason_loaded()
     return true
 end
 
-vim.api.nvim_create_user_command("LspInstallMissing", function()
-    local ft = vim.bo.filetype
+local function install_missing_for_filetype(ft, opts)
+    opts = opts or {}
+    local notify_result = opts.notify_result ~= false
+    local notify_errors = opts.notify_errors ~= false
     local packages = ft_to_mason_packages[ft]
 
     if not packages or #packages == 0 then
-        vim.notify("No Mason-managed LSP package configured for filetype '" .. ft .. "'.", vim.log.levels.INFO)
+        if notify_result then
+            vim.notify("No Mason-managed LSP package configured for filetype '" .. ft .. "'.", vim.log.levels.INFO)
+        end
         return
     end
 
     if not ensure_mason_loaded() then
-        vim.notify("Could not load lazy.nvim to initialize Mason.", vim.log.levels.ERROR)
+        if notify_errors then
+            vim.notify("Could not load lazy.nvim to initialize Mason.", vim.log.levels.ERROR)
+        end
         return
     end
 
     local ok_registry, registry = pcall(require, "mason-registry")
     if not ok_registry then
-        vim.notify("Mason registry unavailable. Run :Lazy sync and try again.", vim.log.levels.ERROR)
+        if notify_errors then
+            vim.notify("Mason registry unavailable. Run :Lazy sync and try again.", vim.log.levels.ERROR)
+        end
         return
     end
 
@@ -302,14 +310,45 @@ vim.api.nvim_create_user_command("LspInstallMissing", function()
             table.insert(lines, "not found in Mason registry: " .. table.concat(unavailable, ", "))
         end
 
-        local level = #unavailable > 0 and vim.log.levels.WARN or vim.log.levels.INFO
-        vim.notify(table.concat(lines, "\n"), level, { title = "LspInstallMissing" })
+        if notify_result then
+            local level = #unavailable > 0 and vim.log.levels.WARN or vim.log.levels.INFO
+            vim.notify(table.concat(lines, "\n"), level, { title = "LspInstallMissing" })
+        elseif notify_errors and #unavailable > 0 then
+            vim.notify(
+                "Mason package(s) missing from registry: " .. table.concat(unavailable, ", "),
+                vim.log.levels.WARN,
+                { title = "LspInstallMissing" }
+            )
+        end
     end
 
     local ok_refresh = pcall(registry.refresh, install_packages)
     if not ok_refresh then
         install_packages()
     end
+end
+
+vim.api.nvim_create_user_command("LspInstallMissing", function()
+    install_missing_for_filetype(vim.bo.filetype, { notify_result = true, notify_errors = true })
 end, {
     desc = "Install missing Mason LSP packages for current filetype",
+})
+
+local auto_install_checked_ft = {}
+vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    callback = function(args)
+        if vim.g.lsp_auto_install_enabled == false then
+            return
+        end
+        local ft = vim.bo[args.buf].filetype
+        if not ft or ft == "" or auto_install_checked_ft[ft] then
+            return
+        end
+        if not ft_to_mason_packages[ft] then
+            return
+        end
+        auto_install_checked_ft[ft] = true
+        install_missing_for_filetype(ft, { notify_result = false, notify_errors = true })
+    end,
 })
