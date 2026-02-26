@@ -140,6 +140,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map_lsp(bufnr, "K", vim.lsp.buf.hover, "Hover docs")
         map_lsp(bufnr, "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
         map_lsp(bufnr, "<leader>ca", vim.lsp.buf.code_action, "Code action")
+
+        local ft = vim.bo[bufnr].filetype
+        if vim.tbl_contains({ "python", "go", "gomod", "gowork", "gosum" }, ft) then
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            if client then
+                vim.diagnostic.config(
+                    { virtual_text = true, underline = true },
+                    vim.lsp.diagnostic.get_namespace(client.id)
+                )
+            end
+        end
     end,
 })
 
