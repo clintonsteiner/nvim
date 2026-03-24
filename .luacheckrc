@@ -1,7 +1,6 @@
 -- Neovim configuration luacheck configuration
 globals = {
     "vim",  -- Neovim global API
-    "os",   -- Standard library
 }
 
 -- Allow defining globals in config files

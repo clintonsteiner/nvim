@@ -3,7 +3,7 @@ local mason_lspconfig = require("mason-lspconfig")
 local mason_tool_installer = require("mason-tool-installer")
 
 -- Set JAVA_HOME for groovyls build on systems with JDK 21
-os.setenv("JAVA_HOME", "/usr/lib/jvm/java-21-openjdk")
+vim.env.JAVA_HOME = "/usr/lib/jvm/java-21-openjdk"
 
 mason.setup({})
 
