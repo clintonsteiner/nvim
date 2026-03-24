@@ -2,6 +2,22 @@
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect', 'popup' }
 vim.opt.pumheight = 20
 
+-- probe for Java 21 and set JAVA_HOME globally for groovyls
+local function setup_java_home()
+    local java21_paths = {
+        "/usr/lib/jvm/java-21-openjdk",
+        "/usr/lib/jvm/java-21-openjdk-amd64",
+        "/usr/lib/jvm/java-21-openjdk-arm64",
+    }
+    for _, path in ipairs(java21_paths) do
+        if vim.fn.isdirectory(path) == 1 then
+            vim.env.JAVA_HOME = path
+            break
+        end
+    end
+end
+setup_java_home()
+
 -- zuban lsp server
 local nvim_venv = vim.env.NVIM_VENV or (vim.env.HOME .. '/.virtualenvs/nvim')
 local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
@@ -23,9 +39,14 @@ local function resolve_cmd(bin_name, extra_args, preferred_path)
         if system_path ~= "" then
             cmd_path = system_path
         else
-            local mason_path = mason_bin .. "/" .. bin_name
-            if vim.fn.executable(mason_path) == 1 then
-                cmd_path = mason_path
+            local go_bin_path = vim.env.HOME .. "/go/bin/" .. bin_name
+            if vim.fn.executable(go_bin_path) == 1 then
+                cmd_path = go_bin_path
+            else
+                local mason_path = mason_bin .. "/" .. bin_name
+                if vim.fn.executable(mason_path) == 1 then
+                    cmd_path = mason_path
+                end
             end
         end
     end
@@ -123,6 +144,7 @@ register_server("groovyls", {
     root_dir = root_with_fallback('gradlew', 'pom.xml', 'build.gradle', 'build.gradle.kts', '.git'),
     filetypes = { "groovy" },
     capabilities = capabilities,
+    cmd_env = vim.env.JAVA_HOME and { JAVA_HOME = vim.env.JAVA_HOME } or nil,
 })
 
 -- clangd server for c/c++

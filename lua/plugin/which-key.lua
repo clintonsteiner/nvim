@@ -11,6 +11,11 @@ wk.add({
     { "<S-Tab>", ":bn<CR>", desc = "next buffer" },
     { "<Tab>", "<C-^>", desc = "last buffer" },
 
+    { "<leader>a", group = "claude ai" },
+    { "<leader>as", "<cmd>lua require('utils.claude').start_session()<CR>", desc = "start session" },
+    { "<leader>aq", "<cmd>lua require('utils.claude').stop_session()<CR>", desc = "stop session" },
+    { "<leader>at", "<cmd>lua require('utils.claude').toggle_session()<CR>", desc = "toggle session" },
+
     { "<leader> ", "<cmd>lua require('fzf-lua').buffers()<CR>", desc = "buffers" },
     { "<leader>/", "<cmd>lua require('fzf-lua').blines({start = 'cursor', fzf_cli_args = '--with-nth=3..'})<CR>", desc = "blines" },
     { "<leader>:", ":source ~/.local/share/nvim/sessions/init<CR>", desc = "open init" },

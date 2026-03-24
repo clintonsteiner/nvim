@@ -1,0 +1,26 @@
+---Mason package mapping for LSP install missing functionality
+---@class MasonPackages
+return {
+    go = { "gopls" },
+    gomod = { "gopls" },
+    gowork = { "gopls" },
+    gosum = { "gopls" },
+    groovy = { "groovyls" },
+    c = { "clangd" },
+    cpp = { "clangd" },
+    sql = { "sqls" },
+    javascript = { "ts_ls" },
+    javascriptreact = { "ts_ls" },
+    typescript = { "ts_ls" },
+    typescriptreact = { "ts_ls" },
+    rust = { "rust_analyzer" },
+    java = { "jdtls" },
+    json = { "jsonls" },
+    jsonc = { "jsonls" },
+    yaml = { "yamlls" },
+    sh = { "bashls" },
+    bash = { "bashls" },
+    zsh = { "bashls" },
+    toml = { "taplo" },
+    markdown = { "marksman" },
+}
