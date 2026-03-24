@@ -129,6 +129,7 @@ register_server("gopls", {
     root_dir = root_with_fallback('go.work', 'go.mod', '.git'),
     filetypes = { "go", "gomod", "gowork", "gosum" },
     capabilities = capabilities,
+    cmd_env = { GOPROXY = "direct" },
     settings = {
         gopls = {
             gofumpt = true,
@@ -161,6 +162,7 @@ register_server("sqls", {
     root_dir = root_with_fallback('.sqls.yml', '.git'),
     filetypes = { "sql", "mysql", "plsql" },
     capabilities = capabilities,
+    cmd_env = { GOPROXY = "direct" },
 })
 
 -- typescript/javascript language server (npm projects supported via package.json roots)
