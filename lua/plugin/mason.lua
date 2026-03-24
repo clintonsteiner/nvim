@@ -24,7 +24,7 @@ mason_lspconfig.setup({
 })
 
 mason_tool_installer.setup({
-    run_on_start = true,
+    run_on_start = false,
     auto_update = false,
     start_delay = 1500,
     integrations = {
