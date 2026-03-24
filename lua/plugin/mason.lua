@@ -9,10 +9,8 @@ mason.setup({})
 
 mason_lspconfig.setup({
     ensure_installed = {
-        "gopls",
         "groovyls",
         "clangd",
-        "sqls",
         "ts_ls",
         "rust_analyzer",
         "jdtls",
