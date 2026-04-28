@@ -1,62 +1,36 @@
----Shared filetype lists for LSP and autocommand configuration
----@class Filetypes
 local M = {}
 
----Python filetypes
 M.python = { "python" }
-
----Go filetypes
 M.go = { "go", "gomod", "gowork", "gosum" }
-
----Groovy filetypes
 M.groovy = { "groovy" }
-
----C/C++ filetypes
 M.c_cpp = { "c", "cpp", "objc", "objcpp", "cuda", "proto" }
-
----SQL filetypes
-M.sql = { "sql", "mysql", "plsql" }
-
----JavaScript/TypeScript filetypes
+M.sql = { "sql" }
 M.javascript = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
-
----Rust filetypes
 M.rust = { "rust" }
-
----Java filetypes
 M.java = { "java" }
-
----JSON filetypes
 M.json = { "json", "jsonc" }
-
----YAML filetypes
 M.yaml = { "yaml" }
-
----Shell filetypes
 M.shell = { "sh", "bash", "zsh" }
-
----TOML filetypes
 M.toml = { "toml" }
-
----Markdown filetypes
 M.markdown = { "markdown" }
+M.lua = { "lua" }
 
----All LSP-enabled filetypes (for LspAttach and missing LSP warnings)
-M.lsp_enabled = {
-    "python",
-    "go", "gomod", "gowork", "gosum",
-    "groovy",
-    "c", "cpp",
-    "sql",
-    "javascript", "javascriptreact",
-    "typescript", "typescriptreact",
-    "rust",
-    "java",
-    "json", "jsonc",
-    "yaml",
-    "sh", "bash", "zsh",
-    "toml",
-    "markdown",
-}
+M.four_space = vim.iter({
+    M.lua, M.python, M.shell, { "c", "cpp" }, M.java, M.rust, M.sql, M.groovy,
+}):flatten():totable()
+
+M.two_space = vim.iter({
+    M.javascript, M.json, M.yaml, M.toml,
+}):flatten():totable()
+
+M.tab_indent = vim.iter({ M.go }):flatten():totable()
+
+M.no_virtual_text = vim.iter({ M.python, M.go }):flatten():totable()
+
+M.lsp_enabled = vim.iter({
+    M.python, M.go, M.groovy, { "c", "cpp" }, M.sql,
+    M.javascript, M.rust, M.java, M.json, M.yaml,
+    M.shell, M.toml, M.markdown,
+}):flatten():totable()
 
 return M

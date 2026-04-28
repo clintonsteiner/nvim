@@ -1,6 +1,8 @@
 vim.g.python3_host_prog = vim.env.HOME .. "/.virtualenvs/nvim/bin/python3"
 vim.g.mapleader = " "
 
+local ft = require("config.filetypes")
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({
@@ -8,7 +10,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
@@ -21,31 +23,7 @@ require("lazy").setup({
             "hrsh7th/cmp-nvim-lsp",
             "williamboman/mason-lspconfig.nvim",
         },
-        ft = {
-            "python",
-            "go",
-            "gomod",
-            "gowork",
-            "gosum",
-            "groovy",
-            "c",
-            "cpp",
-            "sql",
-            "javascript",
-            "javascriptreact",
-            "typescript",
-            "typescriptreact",
-            "rust",
-            "java",
-            "json",
-            "jsonc",
-            "yaml",
-            "sh",
-            "bash",
-            "zsh",
-            "toml",
-            "markdown",
-        },
+        ft = ft.lsp_enabled,
         config = function()
             require("lsp")
         end,
@@ -168,9 +146,9 @@ require("lazy").setup({
 })
 
 -- load modules ------------------------------------------------------------------------------------
-require "settings"
-require "autocmds"
-require "statusline"
-require "disable_plugins"
-require "utils.core"
-require "utils.treesitter"
+require("settings")
+require("autocmds")
+require("utils.statusline")
+require("disable_plugins")
+require("utils.core")
+require("utils.treesitter")
