@@ -875,7 +875,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "darker", extras = ["isort"], specifier = ">=1.7.0" },
+    { name = "darker", extras = ["isort"], specifier = ">=3.0.0" },
     { name = "pynvim", specifier = ">=0.4.3" },
     { name = "ruff", specifier = ">=0.15.11" },
     { name = "zuban", specifier = ">=0.2.0" },
