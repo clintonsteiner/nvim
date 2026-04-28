@@ -11,7 +11,7 @@ dependencies = [
     "pynvim>=0.4.3",
     "zuban>=0.2.0",
     "ruff>=0.15.11",
-    "darker[isort]>=1.7.0",
+    "darker[isort]>=3.0.0",
 ]
 
 [tool.setuptools]
