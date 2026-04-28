@@ -146,6 +146,14 @@ require("lazy").setup({
             require("plugin.which-key")
         end,
     },
+    {
+        "nvim-tree/nvim-tree.lua",
+        event = "VeryLazy",
+        dependencies = "nvim-tree/nvim-web-devicons",
+        config = function()
+            require("plugin.nvim-tree")
+        end,
+    },
 })
 
 -- load modules ------------------------------------------------------------------------------------

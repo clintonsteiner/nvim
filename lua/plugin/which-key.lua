@@ -26,11 +26,17 @@ wk.add({
     { "<leader>z", "<cmd>lua require('fzf-lua').builtin()<CR>", desc = "fzf builtins" },
 
     { "<leader>c", group = "change dir" },
+
+    { "<leader>d", group = "docker" },
+    { "<leader>db", "<cmd>lua require('utils.docker').build()<CR>", desc = "build" },
+    { "<leader>de", "<cmd>lua require('utils.docker').exec()<CR>", desc = "exec" },
+    { "<leader>dl", "<cmd>lua require('utils.docker').logs()<CR>", desc = "logs" },
+    { "<leader>dp", "<cmd>lua require('utils.docker').ps()<CR>", desc = "ps" },
+    { "<leader>dr", "<cmd>lua require('utils.docker').run()<CR>", desc = "run" },
+    { "<leader>dt", "<cmd>lua require('FTerm').open()<CR>", desc = "terminal" },
     { "<leader>cc", ":cd %:p:h<CR>", desc = "change dir cwd" },
     { "<leader>cd", "<cmd>lua require('fzf-lua').fzf_exec([[(echo '..' ; echo '-' ; echo '~' ; find . -type d ! -path \"*.git*\" -follow 2>/dev/null)]], {prompt = 'Cd> ', previewer = false, actions = {['default'] = function(selected) vim.api.nvim_command('cd ' .. selected[1]) end}})<CR>", desc = "change dir" },
     { "<leader>cp", "<cmd>lua require('fzf-lua').fzf_exec([[(echo '..' ; echo '-' ; echo '~' ; find ~/.local -maxdepth 2 -type d ! -path \"*.git*\" -follow 2>/dev/null)]], {prompt = 'Cd> ', previewer = false, actions = {['default'] = function(selected) vim.api.nvim_command('cd ' .. selected[1]) end}})<CR>", desc = "personal projects" },
-        -- use if switch to fd over find:
-        -- { "<leader>cd", "<cmd>lua require('fzf-lua').fzf_exec([[(echo '..' ; echo '-' ; echo '~' ; fd --type=d --follow --hidden --exclude=.git 2>/dev/null)]], {prompt = 'Cd> ', previewer = false, actions = {['default'] = function(selected) vim.api.nvim_command('cd ' .. selected[1]) end}})<CR>", desc = "change dir" },
 
     { "<leader>f", group = "fzf find" },
     { "<leader>fc", "<cmd>lua require('fzf-lua').treesitter({query = '[type] '})<CR>", desc = "classes (treesitter)" },
@@ -59,12 +65,6 @@ wk.add({
     { "<leader>Gt", "<cmd>lua require('utils.go').test_all()<CR>", desc = "test ./..." },
     { "<leader>GT", "<cmd>lua require('utils.go').test_interactive()<CR>", desc = "test interactive" },
 
-    { "<leader>m", group = "go run" },
-    { "<leader>mf", "<cmd>lua require('utils.core').format_buffer()<CR>", desc = "format buffer" },
-    { "<leader>mF", "<cmd>lua require('utils.go').format_all()<CR>", desc = "go fmt ./..." },
-    { "<leader>mr", "<cmd>lua require('utils.go').run_interactive()<CR>", desc = "run interactive" },
-    { "<leader>mt", "<cmd>lua require('utils.go').test_all()<CR>", desc = "test ./..." },
-    { "<leader>mT", "<cmd>lua require('utils.go').test_interactive()<CR>", desc = "test interactive" },
 
     { "<leader>i", group = "insert text" },
     { "<leader>ib", ":lua require('utils.python').abbrev('sbreak')<CR>", desc = "break" },
@@ -94,6 +94,7 @@ wk.add({
     { "<leader>oh", "<cmd>lua require('fzf-lua').oldfiles()<CR>", desc = "history" },
     { "<leader>os", "<cmd>lua require('fzf-lua').fzf_exec('find ~/.local/share/nvim/sessions -type f ! -path \"*.git*\"', {prompt = 'Sessions> ', previewer = false, actions = {['default'] = function(selected) vim.api.nvim_command('source ' .. selected[1]) end}})<CR>", desc = "session" },
     { "<leader>ot", "<cmd>lua require('FTerm').open()<CR>", desc = "terminal" },
+    { "<leader>oe", "<cmd>NvimTreeToggle<CR>", desc = "explorer" },
 
     { "<leader>p", group = "pytest" },
     { "<leader>pb", "<cmd>lua require('FTerm').scratch({cmd = {'pytest', '-sv', '--disable-pytest-warnings', '--cov', require('utils.python').get_pytest_cov_cmd(), '--cov-branch', vim.fn.expand('%:p'), '--cov-report', 'term-missing'}, hl = 'Normal,FloatBorder:FzfLuaBorder', border = 'rounded'})<CR>", desc = "branch coverage" },
@@ -117,6 +118,7 @@ wk.add({
     { "<leader>tw", "<cmd>lua require('utils.core').toggle_text_wrap()<CR>", desc = "text wrap" },
 
     { "<leader>x", group = "system" },
+    { "<leader>xs", "<cmd>lua require('FTerm').open()<CR>", desc = "shell" },
     { "<leader>xl", "<cmd>Lazy<CR>", desc = "lazy" },
     { "<leader>xh", "<cmd>checkhealth<CR>", desc = "health" },
 
