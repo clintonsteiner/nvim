@@ -14,12 +14,6 @@ require("neorg").setup({
                 default_workspace = "notes",
             },
         },
-        ["core.completion"] = {
-            config = {
-                engine = "nvim_cmp",
-            },
-        },
-        ["core.integrations.treesitter"] = {},
         ["core.keybinds"] = {
             config = {
                 default_keybinds = true,
