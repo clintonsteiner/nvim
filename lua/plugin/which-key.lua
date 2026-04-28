@@ -67,6 +67,16 @@ wk.add({
 
 
     { "<leader>i", group = "insert text" },
+
+    { "<leader>n", group = "notes" },
+    { "<leader>nn", "<cmd>Neorg new note<CR>", desc = "new note" },
+    { "<leader>nf", "<cmd>Neorg index<CR>", desc = "find notes" },
+    { "<leader>nj", "<cmd>Neorg journal today<CR>", desc = "today's journal" },
+    { "<leader>nw", "<cmd>Neorg workspace<CR>", desc = "switch workspace" },
+    { "<leader>ni", "<cmd>Neorg insert link<CR>", desc = "insert link" },
+    { "<leader>nt", "<cmd>Neorg inject-metadata<CR>", desc = "inject metadata" },
+
+
     { "<leader>ib", ":lua require('utils.python').abbrev('sbreak')<CR>", desc = "break" },
     { "<leader>il", ":lua require('utils.python').abbrev('lbreak')<CR>", desc = "long break" },
     { "<leader>ip", ":lua require('utils.python').abbrev('pdb')<CR>", desc = "pdb" },

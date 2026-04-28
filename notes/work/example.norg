@@ -1,0 +1,28 @@
+* Project Planning Example
+
+** Overview
+   This is an example note for organizing project information.
+
+** Architecture
+   - Core components
+   - Database layer
+   - API design
+
+** TODO Items
+   - [ ] Design document
+   - [ ] Implement MVP
+   - [ ] Testing strategy
+   - [x] Kickoff meeting
+
+** Key Decisions
+   :: Decision 1
+   :: Decision 2
+
+** Links
+   Related notes: {index}[../]
+
+** Code Reference
+   {@
+   def example_function():
+       pass
+   @}

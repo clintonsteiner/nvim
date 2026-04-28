@@ -1,0 +1,42 @@
+* My Knowledge Base
+  This is your Org-mode-like notetaking system in Neovim.
+
+** Features
+   - Hierarchical note organization with `.norg` syntax
+   - Automatic backlinks and link detection
+   - Export to HTML, Markdown, LaTeX
+   - Journal entries with automatic dates
+   - Code snippets with language highlighting
+   - Todo lists and task management
+   - Math expressions and tables
+
+** Getting Started
+   - <leader>nn: Create a new note
+   - <leader>nf: Open the index (you are here)
+   - <leader>nj: Create/open today's journal entry
+   - <leader>ni: Insert a link to another note
+   - <leader>nw: Switch workspaces
+
+** Organization
+   Notes are organized by:
+   - `journal/`: Daily journal entries
+   - `work/`: Work-related notes and projects
+   - `personal/`: Personal notes and learning
+
+** Example Link
+   {This is a link}[./journal]
+
+** Keybindings
+   Inside `.norg` files, neorg adds special keybindings:
+   - `<CR>` on a link: follow the link
+   - `<BS>`: go back to previous note
+   - `<leader>nf`: find and search notes
+   - See `:help neorg` for full keybindings
+
+** Tips
+   - Use `*` for headings (one per level)
+   - Use `- ` for lists
+   - Use `-- ` for ordered lists
+   - Use `:: ` for definitions
+   - Markdown-like syntax: `*bold*`, `/italic/`, `_underline_`
+   - Embed code with {@ code @}

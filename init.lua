@@ -154,6 +154,14 @@ require("lazy").setup({
             require("plugin.nvim-tree")
         end,
     },
+    {
+        "nvim-neorg/neorg",
+        lazy = false,
+        version = "*",
+        config = function()
+            require("plugin.neorg")
+        end,
+    },
 })
 
 -- load modules ------------------------------------------------------------------------------------
