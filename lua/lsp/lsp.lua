@@ -29,7 +29,13 @@ if has_cmp then
     capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 end
 
+local cmd_cache = {}
 local function resolve_cmd(bin_name, extra_args, preferred_path)
+    local cache_key = bin_name .. (preferred_path or "")
+    if cmd_cache[cache_key] then
+        return cmd_cache[cache_key]
+    end
+
     local cmd_path = nil
 
     if preferred_path and vim.fn.executable(preferred_path) == 1 then
@@ -51,15 +57,16 @@ local function resolve_cmd(bin_name, extra_args, preferred_path)
         end
     end
 
-    if not cmd_path then
-        return nil
+    local result = nil
+    if cmd_path then
+        result = { cmd_path }
+        if extra_args then
+            vim.list_extend(result, extra_args)
+        end
     end
 
-    local cmd = { cmd_path }
-    if extra_args then
-        vim.list_extend(cmd, extra_args)
-    end
-    return cmd
+    cmd_cache[cache_key] = result
+    return result
 end
 
 local function root_with_fallback(...)
@@ -83,11 +90,16 @@ local function register_server(name, config)
     vim.lsp.enable(name)
 end
 
+local java_workspace_cache = nil
 local function get_java_workspace()
+    if java_workspace_cache then
+        return java_workspace_cache
+    end
+
     local project = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-    local workspace = vim.fn.stdpath("data") .. "/jdtls-workspace/" .. project
-    vim.fn.mkdir(workspace, "p")
-    return workspace
+    java_workspace_cache = vim.fn.stdpath("data") .. "/jdtls-workspace/" .. project
+    vim.fn.mkdir(java_workspace_cache, "p")
+    return java_workspace_cache
 end
 
 register_server("zuban", {
@@ -219,7 +231,7 @@ register_server("taplo", {
     capabilities = capabilities,
 })
 
--- turn off diagnostics by default
+-- turn off diagnostics by default, use simple config without complex debouncing
 vim.diagnostic.config({
     virtual_text = false,
     signs = false,

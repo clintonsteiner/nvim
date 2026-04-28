@@ -1,3 +1,12 @@
+-- luacheck: ignore 211 (unused variable)
+-- Cached values for expensive operations
+local cached_lsp_names = ""
+local cached_class_name = ""
+local cached_func_name = ""
+
+-- Forward declare functions for luacheck
+local update_lsp_names, update_treesitter_cache
+
 function get_mode_color(mode)
     local mode_color = '%#OtherMode#'
     local mode_color_table = {
@@ -6,7 +15,7 @@ function get_mode_color(mode)
         R = '%#ReplaceMode#',
         v = '%#VisualMode#',
         V = '%#VisualMode#',
-        [''] = '%#VisualMode#',
+        [''] = '%#VisualMode#',
     }
     if mode_color_table[mode] then
         mode_color = mode_color_table[mode]
@@ -16,7 +25,7 @@ end
 
 function get_readonly_char()
     local ro_char = ''
-    if vim.bo.readonly or vim.bo.modifiable == false then ro_char = '' end
+    if vim.bo.readonly or vim.bo.modifiable == false then ro_char = '' end
     return ro_char
 end
 
@@ -33,47 +42,64 @@ function gitsigns_status(key)
     if summary[key] == nil then return '' end
     if summary[key] == '' then return '' end
     if summary[key] == 0 then return '' end
-    local prefix = {head = ' ', added = '+', changed = '~', removed = '-'}
+    local prefix = {head = ' ', added = '+', changed = '~', removed = '-'}
     return string.format(" %s%s ", prefix[key], summary[key])
 end
 
 function get_lsp_names()
-    local clients = vim.lsp.get_clients()
+    return cached_lsp_names
+end
+
+function update_lsp_names()
+    local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
     local lsps = {}
     for _, client in pairs(clients) do
         table.insert(lsps, client.name)
     end
-    local lsp_names = ""
+    cached_lsp_names = ""
     if #lsps > 0 then
-        lsp_names = "  " .. table.concat(lsps, "+") .. " "
+        cached_lsp_names = "  " .. table.concat(lsps, "+") .. " "
     end
-    return lsp_names
 end
 
 function _get_current_class_name()
-    local class_name = ""
-    local clients = vim.lsp.get_clients()
-    if next(clients) ~= nil then  -- effectively checks for an empty talbe in lua
-        local utils_treesitter = require('utils.treesitter')
-        class_name = utils_treesitter.get_current_class_name()
-        if class_name ~= "" then
-            class_name = "  " .. class_name .. " "
-        end
-    end
-    return class_name
+    return cached_class_name
 end
 
 function _get_current_function_name()
-    local func_name = ""
-    local clients = vim.lsp.get_clients()
-    if next(clients) ~= nil then  -- effectively checks for an empty table in lua
-        local utils_treesitter = require('utils.treesitter')
-        func_name = utils_treesitter.get_current_function_name()
-        if func_name ~= nil and func_name ~= "" then
-            func_name = "  󰊕 "  .. func_name .. " "
-        end
+    return cached_func_name
+end
+
+function update_treesitter_cache()
+    if vim.bo.filetype ~= "python" then
+        cached_class_name = ""
+        cached_func_name = ""
+        return
     end
-    return func_name
+
+    local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+    if not next(clients) then
+        cached_class_name = ""
+        cached_func_name = ""
+        return
+    end
+
+    local ok, utils_treesitter = pcall(require, 'utils.treesitter')
+    if not ok then
+        return
+    end
+
+    local class_name = utils_treesitter.get_current_class_name()
+    cached_class_name = ""
+    if class_name ~= "" then
+        cached_class_name = "  " .. class_name .. " "
+    end
+
+    local func_name = utils_treesitter.get_current_function_name()
+    cached_func_name = ""
+    if func_name ~= nil and func_name ~= "" then
+        cached_func_name = "  󰊕 "  .. func_name .. " "
+    end
 end
 
 function status_line()
@@ -102,11 +128,11 @@ function win_bar()
     file_path = file_path:gsub('^%/', '')
 
     if not (file_name == nil or file_name == '' or string.sub(file_path, 1, 5) == 'term:') then
-        local file_icon = ' '
+        local file_icon = ' '
         file_icon = '%#WinBarIcon#' .. file_icon .. '%*'
         local file_modified = ''
         if vim.bo.modified then
-            file_modified = '%#WinBarModified#%*'
+            file_modified = '%#WinBarModified#%*'
         end
         value = value .. file_icon .. file_name .. ' ' .. file_modified .. ' %-{luaeval("get_readonly_char()")}%#NonText#% %#InsertMode#%-{luaeval("_get_current_class_name()")}%#CurSearch#%-{luaeval("_get_current_function_name()")}%#NonText#%'
     end
@@ -115,3 +141,35 @@ end
 
 vim.opt.winbar = '%!luaeval("win_bar()")'
 vim.opt.laststatus = 3
+
+-- Set up event handlers to update caches
+local group = vim.api.nvim_create_augroup("StatuslineCaches", { clear = true })
+
+vim.api.nvim_create_autocmd({ "LspAttach", "LspDetach" }, {
+    group = group,
+    callback = function()
+        update_lsp_names()
+    end,
+})
+
+vim.api.nvim_create_autocmd("CursorMoved", {
+    group = group,
+    callback = function()
+        update_treesitter_cache()
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    callback = function()
+        cached_class_name = ""
+        cached_func_name = ""
+        update_lsp_names()
+    end,
+})
+
+-- Initial update on startup
+vim.schedule(function()
+    update_lsp_names()
+    update_treesitter_cache()
+end)

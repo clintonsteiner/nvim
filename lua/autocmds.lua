@@ -68,7 +68,12 @@ local function cmd_label(cmd)
     return tostring(cmd or "")
 end
 
+local server_cache = {}
 local function configured_servers_for_ft(filetype)
+    if server_cache[filetype] then
+        return server_cache[filetype].available, server_cache[filetype].missing
+    end
+
     local ok, configs = pcall(vim.lsp.get_configs)
     if not ok or type(configs) ~= "table" then
         return {}, {}
@@ -92,6 +97,7 @@ local function configured_servers_for_ft(filetype)
 
     table.sort(available)
     table.sort(missing)
+    server_cache[filetype] = { available = available, missing = missing }
     return available, missing
 end
 
@@ -146,7 +152,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
             local client = vim.lsp.get_client_by_id(args.data.client_id)
             if client then
                 vim.diagnostic.config(
-                    { virtual_text = true, underline = true },
+                    { virtual_text = false, underline = true },
                     vim.lsp.diagnostic.get_namespace(client.id)
                 )
             end
